@@ -1,0 +1,75 @@
+# Preparing the text content in a structured way for .txt file format
+
+nodejs_questions = """
+1. What is Node.js?
+Node.js is an open-source, cross-platform runtime environment that allows developers to execute JavaScript code server-side. It's built on Chrome's V8 JavaScript engine.
+
+2. What are the main features of Node.js?
+- Asynchronous and Event-Driven: Non-blocking I/O model.
+- Single-threaded: Uses a single thread to handle multiple connections.
+- Fast Execution: Built on Google's V8 engine.
+- NPM (Node Package Manager): A vast library of open-source packages.
+
+3. What is the difference between require() and import?
+- require() is used in CommonJS modules (Node.js pre-ES6).
+- import is used in ES6 modules, which are now also supported by Node.js.
+
+4. Explain the event loop in Node.js.
+The event loop allows Node.js to perform non-blocking I/O operations by offloading tasks to the system kernel when possible. It's the mechanism that allows Node.js to handle asynchronous operations.
+
+5. What is NPM?
+NPM (Node Package Manager) is the default package manager for Node.js. It allows developers to install, share, and manage dependencies in their Node.js projects.
+
+6. How do you handle asynchronous operations in Node.js?
+Using callbacks, Promises, or async/await.
+
+7. What is a callback function?
+A callback is a function that is passed as an argument to another function and is executed after the completion of that function.
+
+8. What are streams in Node.js?
+Streams are objects that let you read or write data continuously. Examples are fs.createReadStream() and fs.createWriteStream().
+
+9. What is the difference between process.nextTick() and setImmediate()?
+- process.nextTick() executes code after the current operation completes but before the event loop continues.
+- setImmediate() executes code in the next iteration of the event loop.
+
+10. What is middleware in Node.js (Express.js)?
+Middleware functions are functions that have access to the request object (req), the response object (res), and the next function in the application's request-response cycle. They can execute code, modify request and response objects, and end the request-response cycle.
+
+11. How do you manage dependencies in a Node.js project?
+Using the package.json file to list all dependencies. You can install dependencies using npm install.
+
+12. What is the purpose of the package.json file?
+It contains metadata about the project and its dependencies, scripts, versions, and other configurations.
+
+13. What is the difference between synchronous and asynchronous code in Node.js?
+- Synchronous code is executed line by line, blocking the execution of further code until the current one completes.
+- Asynchronous code executes non-blocking, allowing the program to continue running while waiting for an operation to complete.
+
+14. How do you handle errors in Node.js?
+Using try...catch blocks for synchronous code and handling errors in callbacks, promises, or async/await functions.
+
+15. What is the use of the Buffer class in Node.js?
+Buffer is used to handle binary data in Node.js. It allows interaction with TCP streams, file systems, and other data streams.
+
+16. What is the difference between readFile and createReadStream in Node.js?
+- readFile reads the entire file into memory before returning the result.
+- createReadStream reads the file in chunks using streams, which is more memory-efficient for large files.
+
+17. Explain the purpose of module.exports in Node.js.
+module.exports is used to export functions, objects, or variables from a Node.js module, making them accessible in other modules.
+
+18. What is Express.js?
+Express.js is a minimal and flexible Node.js web application framework that provides robust features for building web and mobile applications.
+
+19. How do you set up a simple HTTP server using Node.js?
+```js
+const http = require('http');
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello, World!\\n');
+});
+server.listen(3000, () => {
+    console.log('Server running at http://localhost:3000/');
+});
