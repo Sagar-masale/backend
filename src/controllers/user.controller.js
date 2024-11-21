@@ -60,7 +60,9 @@ const registerUser = asyncHandler( async (req, res) => {
     })
 
     if(existedUser){
-        throw new apiError(409, "phoneNumber or email is already exists")
+        return res.status(409).json(
+            new apiResponse(409, "This email or phone number is already registered.")
+        )
     }
 
     // create user object - create entry in db.
@@ -83,7 +85,7 @@ const registerUser = asyncHandler( async (req, res) => {
             throw new apiError(500, "somthing went wrong while regersting the user")
         }
 
-        // return res.
+        // return true res.
         return res.status(201).json(
             new apiResponse(200, createdUser, "user registered successfully")
         )
