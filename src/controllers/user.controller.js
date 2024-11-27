@@ -60,7 +60,10 @@ const registerUser = asyncHandler( async (req, res) => {
     })
 
     if(existedUser){
-        throw new apiError(400, "This email or phone number is already registered.")
+        // throw new apiError(400, "This email or phone number is already registered.")
+        
+            new apiError(400, "This email or phone number is already registered.")
+        
     }
     
     // create user object - create entry in db.
