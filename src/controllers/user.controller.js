@@ -219,13 +219,21 @@ const refreshAccessToken = asyncHandler(async(req, res) =>{
    } catch (error) {
         throw new apiError(error?.message || "Invalid refresh token")
    }
-
-
+})
+const getCurrentUser = asyncHandler(async(req, res) => {
+    return res
+    .status(200)
+    .json(new apiResponse(
+        200,
+        req.user,
+        "User fetched successfully"
+    ))
 })
 
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    getCurrentUser
 }
