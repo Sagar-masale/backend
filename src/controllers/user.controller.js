@@ -28,8 +28,8 @@ const registerUser = asyncHandler( async (req, res) => {
     // get user details from frontend.
     // validation - not empty.
     // check if user already exist: phoneNumber, email.
-    // check for image, check for avatar.
-    // upload them to cloudinary, avatar.
+    
+
     // create user object - create entry in db.
     // remove password and refresh token field from response.
     // check for user creation.
@@ -59,12 +59,12 @@ const registerUser = asyncHandler( async (req, res) => {
         $or: [{ phoneNumber }, { email }]
     })
 
-    if(existedUser){
-        // throw new apiError(400, "This email or phone number is already registered.")
-        
-            new apiError(400, "This email or phone number is already registered.")
-        
+    if (existedUser) {
+        return res.status(400).json({ 
+            message: "This email or phone number is already registered." 
+        });
     }
+    
     
     // create user object - create entry in db.
     const user = await User.create({
@@ -114,19 +114,29 @@ const loginUser = asyncHandler( async (req, res) => {
         $or: [{email} , {phoneNumber}]
     })
 
-    if(!user) {
-        throw new apiError(404, "User does not exist")
+    // if(!user) {
+    //     throw new apiError(404, "User does not exist")
+    //     return res new apiResponse.status(404).json({ message: "User does not exist" });
+    // }
+    if (!user) {
+        return res.status(404).json({ message: "User does not exist" });
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password)
 
     if(!isPasswordValid) {
-        throw new apiError(401, "Password is incorrect")
+        return res.status(401).json({ message: "Password is incorrect" });
     }
+ 
+
+    
+       
+ 
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+    
 
     //  pass cookie 
     const options = {

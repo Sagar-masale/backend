@@ -6,9 +6,9 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}))
+    origin: 'http://localhost:5173', // Replace this with the exact URL of your frontend
+    credentials: true, // Allow cookies to be sent
+  }));
 
 
 
