@@ -1,1 +1,1 @@
-export const DB_NAME = "Demo"
+export const DB_NAME = "pbs_jewellers_db"

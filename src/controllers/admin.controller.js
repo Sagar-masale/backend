@@ -1,6 +1,6 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
-import { Admin } from "../models/admin.model.js"
+import { Admin } from "../models/Admin.model.js";
 
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from 'jsonwebtoken'
@@ -8,20 +8,74 @@ import jwt from 'jsonwebtoken'
 const generateAccessAndRefreshToken = async(adminId) => {
     try {
         const admin = await Admin.findById(adminId)
-        const accessToken = Admin.generateAccessToken()
-        const refreshToken = Admin.generateRefreshToken()
+        const accessToken = admin.generateAccessToken()
+        const refreshToken = admin.generateRefreshToken()
         
         // assign userRefreshToken to refreshToken
-        admin.refreshToken = refreshToken
-        await admin.save({ validateBeforeSave: false })
+        admin.refreshToken = refreshToken;
+        await admin.save({ validateBeforeSave: false });
 
         return {accessToken, refreshToken}
+        
 
 
     } catch (error) {
+        console.log('err message',error.message);
+        
         throw new apiError(500, "somthing went wrong while generating refresh and access token")
     }
 }
+
+const registerAdmin = asyncHandler( async (req, res) => {
+
+    const {adminEmail = '', adminFullName = '', adminPassword = '', adminPhoneNumber = '', adminUserName = '' } = req.body || {};
+    // console.log("email: ", email);
+
+
+    // validation - not empty.
+    if (
+        //check all user data is empty or not ( adv js )
+        [adminEmail, adminFullName, adminPassword, adminPhoneNumber, adminUserName].some((field) => 
+        field?.trim()== "")
+    ) {
+        throw new apiError(400, "All fields are required")
+    }
+
+    
+    // check if admin already exist: phoneNumber, email.
+    const existedAdmin = await  Admin.findOne({
+        $or: [{ adminPhoneNumber }, { adminEmail }]
+    })
+
+    if (existedAdmin) {
+        return res.status(400).json({ 
+            message: "This email or phone number is already registered." 
+        });
+    }
+    
+    
+    // create user object - create entry in db.
+    const admin = await Admin.create({
+        adminEmail, adminFullName, adminPassword, adminPhoneNumber, adminUserName
+    })
+
+    // remove password and refresh token field from response.
+    const createdAdmin = await Admin.findById(admin._id)
+        .select(
+            "-password -refreshToken"
+        )
+
+        // check for admin creation.
+    
+        if(!createdAdmin){
+            throw new apiError(500, "somthing went wrong while regersting the user")
+        }
+
+        // return true res.
+        return res.status(201).json(
+            new apiResponse(200, createdAdmin, "admin registered successfully")
+        )
+} )
 
 
 const loginAdmin = asyncHandler( async (req, res) => {
@@ -49,7 +103,7 @@ const loginAdmin = asyncHandler( async (req, res) => {
         return res.status(404).json({ message: "Admin does not exist" });
     }
 
-    const isPasswordValid = await admin.isPasswordCorrect(password)
+    const isPasswordValid = await admin.isPasswordCorrect(adminPassword)
 
     if(!isPasswordValid) {
         return res.status(401).json({ message: "Password is incorrect" });
@@ -170,6 +224,7 @@ const getCurrentAdmin = asyncHandler(async(req, res) => {
 })
 
 export {
+    registerAdmin,
     loginAdmin,
     logoutAdmin,
     refreshAccessTokenAdmin,
