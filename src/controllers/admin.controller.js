@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { Admin } from "../models/Admin.model.js";
-
+import { User } from "../models/user.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from 'jsonwebtoken'
 
@@ -140,6 +140,12 @@ const loginAdmin = asyncHandler( async (req, res) => {
 
 })
 
+const getAllUsers = asyncHandler( async (req, res) => {
+    const users = await User.find();
+    return res.status(200).json(users);
+})
+
+
 const logoutAdmin = asyncHandler(async(req, res) => {
     await Admin.findByIdAndUpdate(
         req.admin._id,
@@ -228,5 +234,6 @@ export {
     loginAdmin,
     logoutAdmin,
     refreshAccessTokenAdmin,
-    getCurrentAdmin
+    getCurrentAdmin,
+    getAllUsers
 }
