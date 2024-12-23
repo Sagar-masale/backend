@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-const RingDataSchema = new Schema(
+const ringDataSchema = new Schema(
     {
         ProductImages: {
             type: String,
@@ -24,7 +24,7 @@ const RingDataSchema = new Schema(
             required: true,
         },
         ProductDescription: {
-            type: true,
+            type: String,
             required: true,
         },
         adminId: {
@@ -32,3 +32,6 @@ const RingDataSchema = new Schema(
         }, // Reference to Admin
 
 }, {timestamps: true});
+
+
+export const RingData = mongoose.model("RingData", ringDataSchema)

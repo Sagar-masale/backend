@@ -18,6 +18,7 @@ app.use(cors({
 // routes import 
 import userRout from './routes/user.routes.js';
 import adminRout from './routes/admin.routes.js';
+import ringDataRouter from './routes/products.routes.js';
 
 
 
@@ -33,6 +34,7 @@ app.use(cookieParser())
 // Routes Declaration
 app.use('/api/v1/users', userRout);
 app.use('/api/v1/admins', adminRout);
+app.use('/api/v1/products', ringDataRouter);
 
 
 // routes declaration
