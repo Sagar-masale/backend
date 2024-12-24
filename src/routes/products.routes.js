@@ -5,6 +5,6 @@ import {upload} from "../middlewares/multer.middleware.js"
 const ringDataRouter = Router()
 
 ringDataRouter.route("/add-ring").post(
-    upload.single("ProductImages"),getRingDataWithAdmin)
+    upload.array("ProductImages", 10),getRingDataWithAdmin)
 
 export default ringDataRouter

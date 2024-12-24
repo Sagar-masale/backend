@@ -19,11 +19,17 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   } = req.body;
 
   
+  const files = req.files;
 
-
+  if (!files || files.length === 0) {
+    throw new apiError(400, "At least one image file is required");
+  }
+  
+  console.log("Uploaded files:", files);
+  
+  
   // Validate other fields
   if (
-    !req.file ||
     !ProductName ||
     !ProductCategory ||
     !ProductPrice  ||
@@ -40,16 +46,17 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(404, "Invalid admin ID");
   }
 
-//   const ringLocalPath = req.files?.ProductImages[0]?.path;
 
-//   if (!ringLocalPath) {
-//     throw new apiError(400, "Avatar file is required")
-// }
-  const RingImage = await uploadOnCloudinary(req.file.path)
-
-  if (!RingImage) {
-    throw new apiError(400, "image file is required")
-  }
+  const uploadedImages = await Promise.all(
+    files.map(async (file) => {
+      const uploadedImage = await uploadOnCloudinary(file.path);
+      if (!uploadedImage || !uploadedImage.url) {
+        throw new apiError(400, "Failed to upload one or more images");
+      }
+      return uploadedImage.url; // Store the URL for each uploaded image
+    })
+  );
+  
 
   
 
@@ -58,7 +65,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
 
   // Add ring data to the database
   const newRing = await RingData.create({
-    ProductImages: RingImage.url, // Store the Cloudinary URL
+    ProductImages: uploadedImages, // Store array of image URLs
     ProductName,
     ProductCategory,
     ProductPrice,
@@ -66,6 +73,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductDescription,
     adminId,
   });
+  
 
   // Send success response
   res.status(201).json(

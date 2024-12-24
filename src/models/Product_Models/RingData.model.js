@@ -3,7 +3,7 @@ import mongoose, {Schema} from "mongoose";
 const ringDataSchema = new Schema(
     {
         ProductImages: {
-            type: String,
+            type: Array,
             required: true
         },
         ProductName: {
