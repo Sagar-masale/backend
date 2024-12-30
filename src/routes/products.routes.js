@@ -7,4 +7,6 @@ const ringDataRouter = Router()
 ringDataRouter.route("/add-ring").post(
     upload.array("ProductImages", 10),getRingDataWithAdmin)
 
+    // ringDataRouter.route("/All-rings").get(getAllRings);
+
 export default ringDataRouter

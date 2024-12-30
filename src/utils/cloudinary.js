@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+
 import fs from "fs";
 
 // Validate Cloudinary configuration
@@ -23,15 +24,16 @@ const uploadOnCloudinary = async (localFilePath) => {
     try {
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto", // Automatically detect the file type
+            folder:'RingData'
         });
         console.log("File uploaded successfully:", response.url);
-        fs.unlinkSync(localFilePath); // Remove the local file after upload
         return response;
     } catch (error) {
         console.error("Error uploading to Cloudinary:", error.message);
-        if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath); // Safely delete file
         return null;
     }
 };
+
+
 
 export { uploadOnCloudinary };
