@@ -1,6 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 
-const ringDataSchema = new Schema(
+const ringtDataSchema = new Schema(
     {
         ProductImages: {
             type: Array,
@@ -34,4 +34,4 @@ const ringDataSchema = new Schema(
 }, {timestamps: true});
 
 
-export const RingData = mongoose.model("RingData", ringDataSchema)
+export const RingData = mongoose.model("RingData", ringtDataSchema)
