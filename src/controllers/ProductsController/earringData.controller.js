@@ -88,3 +88,4 @@ const getEarringData = asyncHandler(async (req, res) => {
 });
 
 export { getEarringDataWithAdmin, getEarringData };
+

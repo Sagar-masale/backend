@@ -24,7 +24,7 @@ const uploadOnCloudinary = async (localFilePath) => {
     try {
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto", // Automatically detect the file type
-            folder:'RingData'
+            folder:'Product Images'
         });
         console.log("File uploaded successfully:", response.url);
         return response;
