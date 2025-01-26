@@ -18,7 +18,7 @@ app.use(cors({
 // routes import 
 import userRout from './routes/user.routes.js';
 import adminRout from './routes/admin.routes.js';
-import { earringDataRouter, ringDataRouter, pendantDataRouter, mangalsutraDataRouter } from './routes/products.routes.js';
+import { earringDataRouter, ringDataRouter, pendantDataRouter, mangalsutraDataRouter, bangleDataRouter, chainDataRouter } from './routes/products.routes.js';
 
 
 
@@ -38,7 +38,9 @@ app.use('/api/v1/admins', adminRout);
 app.use("/api/v1/products", earringDataRouter); 
 app.use("/api/v1/products", ringDataRouter); 
 app.use("/api/v1/products", pendantDataRouter); 
-app.use("/api/v1/products", mangalsutraDataRouter)
+app.use("/api/v1/products", mangalsutraDataRouter);
+app.use("/api/v1/products", bangleDataRouter);
+app.use("/api/v1/products", chainDataRouter);
 
 
 // routes declaration
