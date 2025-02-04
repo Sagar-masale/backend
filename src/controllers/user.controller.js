@@ -185,6 +185,41 @@ const logoutUser = asyncHandler(async(req, res) => {
     .json(new apiResponse(200, {}, "User logged Out"))
 })
 
+const updateUser = asyncHandler(async (req, res) => {
+    const { userId, password, ...updates } = req.body;
+
+    // Remove empty fields (undefined, null, or empty string)
+    const filteredUpdates = Object.fromEntries(
+        Object.entries(updates).filter(([_, value]) => value?.toString().trim())
+    );
+
+    // If no fields are provided, return an error
+    if (Object.keys(filteredUpdates).length === 0 && !password) {
+        throw new apiError(400, "At least one field is required to update");
+    }
+
+    // Include password only if provided
+    if (password) {
+        filteredUpdates.password = password;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $set: filteredUpdates },
+        { new: true, runValidators: true, context: 'query' }
+    ).select("-password -refreshToken");
+
+    if (!updatedUser) {
+        throw new apiError(404, "User not found");
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, updatedUser, "User updated successfully")
+    );
+});
+
+
+
 const refreshAccessToken = asyncHandler(async(req, res) =>{
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
@@ -245,5 +280,6 @@ export {
     loginUser,
     logoutUser,
     refreshAccessToken,
-    getCurrentUser
+    getCurrentUser,
+    updateUser
 }
