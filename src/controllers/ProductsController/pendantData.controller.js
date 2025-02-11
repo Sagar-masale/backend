@@ -16,6 +16,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     ProductPrice,
     ProductQty,
     ProductDescription,
+    ProductGender,
     adminId,
   } = req.body;
 
@@ -32,6 +33,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     !ProductPrice ||
     !ProductQty ||
     !ProductDescription ||
+    !ProductGender ||
     !adminId
   ) {
     throw new apiError(400, "All fields are required");
@@ -61,6 +63,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     ProductPrice,
     ProductQty,
     ProductDescription,
+    ProductGender,
     adminId,
   });
 

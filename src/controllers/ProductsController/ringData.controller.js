@@ -8,7 +8,7 @@ import { uploadOnCloudinary } from "../../utils/cloudinary.js";
 
 // Controller to handle adding ring data
 const getRingDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
+  // console.log("Received files:", req.files); // Debug log for files
 
   const {
     ProductImages,
@@ -17,8 +17,10 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductPrice,
     ProductQty,
     ProductDescription,
+    ProductGender,
     adminId,
   } = req.body;
+  
 
   const files = req.files;
 
@@ -33,6 +35,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     !ProductPrice  ||
     !ProductQty  ||
     !ProductDescription ||
+    !ProductGender ||
     !adminId
   ) {
     throw new apiError(400, "All fields are required");
@@ -62,6 +65,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductPrice,
     ProductQty,
     ProductDescription,
+    ProductGender,
     adminId,
   });
 

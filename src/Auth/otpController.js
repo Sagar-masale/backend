@@ -10,8 +10,9 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 export const sendOtp = asyncHandler(async (req, res) => {
     const { email } = req.body;
     if (!email) {
-        throw new apiError(400, "Email is required");
+        throw new apiError(400, "Email is required");   
     }
+    console.log("Received OTP request for email:", email);
 
     const otp = generateOTP();
     otpStore.set(email, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
@@ -34,3 +35,4 @@ export const verifyOtp = asyncHandler(async (req, res) => {
     otpStore.delete(email);
     return res.status(200).json(new apiResponse(200, {}, "OTP verified successfully"));
 });
+
