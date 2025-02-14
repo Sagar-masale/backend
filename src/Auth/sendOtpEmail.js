@@ -14,92 +14,78 @@ const transporter = nodemailer.createTransport({
 export const sendOtpEmail = async (email, otp) => {
     try {
         await transporter.sendMail({
-            from: `"PBS Jewellers Support" <${process.env.EMAIL}>`,
+            from: `"PBS Gold Shop" <${process.env.EMAIL}>`,
             to: email,
-            subject: "🔒 Secure OTP for Your Verification – PBS Jewellers",
+            subject: "Your OTP for Verification – PBS Gold Shop",
             html: `
-           <!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        .email-container {
-            max-width: 500px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: left;
-            margin: auto;
-        }
-        h2 {
-            color: #4f3267;
-        }
-        p {
-            font-size: 16px;
-            color: #333;
-        }
-        .otp-box {
-            font-size: 22px;
-            font-weight: bold;
-            color: #d35400;
-            background: #f3f3f3;
-            padding: 10px 20px;
-            border-radius: 8px;
-            display: inline-block;
-            letter-spacing: 2px;
-        }
-        .footer {
-            font-size: 13px;
-            margin-top: 20px;
-            color: #777;
-        }
-        .contact {
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        a {
-            color: #4f3267;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="email-container">
-        <h2>OTP Verification – PBS Jewellers</h2>
-        <p>Dear Customer,</p>
-        <p>We are requesting verification of your identity for security purposes. Please use the One-Time Password (OTP) below to complete your verification:</p>
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f9;
+                        padding: 20px;
+                    }
+                    .email-container {
+                        max-width: 500px;
+                        background: #fff;
+                        padding: 20px;
+                        border-radius: 8px;
+                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                        margin: auto;
+                        text-align: left;
+                        color: #333;
+                    }
+                    h2 {
+                        color: #4f3267;
+                        margin-bottom: 10px;
+                    }
+                    p {
+                        font-size: 14px;
+                        line-height: 1.6;
+                        margin: 10px 0;
+                    }
+                    .otp {
+                        font-weight: bold;
+                        color: #4f3267;
+                    }
+                    .footer {
+                        font-size: 12px;
+                        color: #777;
+                        margin-top: 20px;
+                        border-top: 1px solid #eee;
+                        padding-top: 10px;
+                    }
+                    a {
+                        color: #4f3267;
+                        text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <h2>OTP Verification</h2>
+                    <p>Dear Customer,</p>
+                    <p>To verify your identity, please use the following OTP:</p>
+                    
+                    <p>Your OTP is: <span class="otp">${otp}</span></p>
         
-        <div class="otp-box">${otp}</div>
-
-        <p>(This OTP will remain valid for 5 minutes.)</p>
-
-        <p class="footer">
-            If you did not request this OTP or believe you have received this email in error, please ignore it. 
-        </p>
-
-        <p class="contact">
-            <strong>Customer Support:</strong> +91 9146455820<br>
-            <strong>Website:</strong> <a href="https://www.pbsjewellers.com" target="_blank">www.pbsjewellers.com</a>
-        </p>
-
-        <p class="footer">
-            <strong>Your Privacy Matters:</strong> We respect your privacy. Please review our 
-            <a href="https://www.pbsjewellers.com/privacy-policy" target="_blank">Privacy Policy</a>.
-        </p>
-
-        <p><strong>Best Regards,</strong><br>PBS Jewellers Team</p>
-    </div>
-</body>
-</html>
-`
-            
-            
+                    <p>This OTP is valid for 5 minutes. Do not share it with anyone for security reasons.</p>
+        
+                    <p class="footer">
+                        If you did not request this, please ignore this email. 
+                        <br><br>
+                        <strong>PBS Gold Shop</strong><br>
+                        <a href="https://www.pbsgoldshop.com" target="_blank">www.pbsgoldshop.com</a>
+                    </p>
+                </div>
+            </body>
+            </html>
+            `
         });
+        
+        
     } catch (error) {
         console.error("Error sending OTP:", error);
         throw new Error("Failed to send OTP");
