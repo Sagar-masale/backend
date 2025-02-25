@@ -31,7 +31,8 @@ const adminSchema = new Schema (
         },
         refreshToken: {
             type: String
-        }
+        },
+        
 
     }, 
     {

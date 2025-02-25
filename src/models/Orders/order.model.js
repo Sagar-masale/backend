@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const reviewSchema = new Schema(
+const orderSchema = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,28 +11,24 @@ const reviewSchema = new Schema(
       type: String,
       required: true,
     },
-    userName: {
-      type: String,
-      required: true,
-    },
-    reviewTitle: {
-      type: String,
-      required: true,
-    },
-    reviewRating: {
+    totalAmount: {
       type: Number,
       required: true,
-      min: 1,
-      max: 5,
     },
-    reviewComment: {
+    orderStatus: {
       type: String,
+      enum: ["pending", "Success", "Cancle"],
+      default: "pending",
+    },
+    orderQuantity: {
+      type: Number,
       required: true,
+      default: 1,
     },
   },
   {
-    timestamps: true,
+    timestamps: true, 
   }
 );
 
-export const Review = mongoose.model("Review", reviewSchema);
+export const Order = mongoose.model("Order", orderSchema);

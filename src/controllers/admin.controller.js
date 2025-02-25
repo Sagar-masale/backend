@@ -140,10 +140,12 @@ const loginAdmin = asyncHandler( async (req, res) => {
 
 })
 
-const getAllUsers = asyncHandler( async (req, res) => {
-    const users = await User.find();
-    return res.status(200).json(users);
-})
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find().populate("userOrders");
+
+    return res.status(200).json(new apiResponse(200, users, "Users retrieved successfully"));
+});
+
 
 
 const logoutAdmin = asyncHandler(async(req, res) => {
