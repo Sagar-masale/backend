@@ -141,7 +141,10 @@ const loginAdmin = asyncHandler( async (req, res) => {
 })
 
 const getAllUsers = asyncHandler(async (req, res) => {
-    const users = await User.find().populate("userOrders");
+    const users = await User.find()
+    .populate("userOrders")
+    .select("-password -refreshToken -accessToken");
+  
 
     return res.status(200).json(new apiResponse(200, users, "Users retrieved successfully"));
 });

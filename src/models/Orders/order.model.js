@@ -7,10 +7,12 @@ const orderSchema = new Schema(
       ref: "User",
       required: true,
     },
-    productId: {
-      type: String,
-      required: true,
-    },
+    products: [
+      {
+          productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+          orderQuantity: { type: Number, required: true }
+      }
+  ],
     totalAmount: {
       type: Number,
       required: true,
@@ -19,11 +21,6 @@ const orderSchema = new Schema(
       type: String,
       enum: ["pending", "Success", "Cancle"],
       default: "pending",
-    },
-    orderQuantity: {
-      type: Number,
-      required: true,
-      default: 1,
     },
   },
   {

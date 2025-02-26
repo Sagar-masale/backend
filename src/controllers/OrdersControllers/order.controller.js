@@ -3,82 +3,131 @@ import { apiError } from "../../utils/apiError.js";
 import { apiResponse } from "../../utils/apiResponse.js";
 import { Order } from "../../models/Orders/order.model.js";
 import { User } from "../../models/user.model.js";
+import { BangleData } from "../../models/Product_Models/bangleData.model.js";
+import { ChainData } from "../../models/Product_Models/chainData.model.js";
+import { EarringData } from "../../models/Product_Models/earringData.model.js";
+import { MangalsutraData } from "../../models/Product_Models/mangalsutraData.model.js";
+import { PendantData } from "../../models/Product_Models/pendantData.model.js";
+import { RingData } from "../../models/Product_Models/ringData.model.js";
 
-// Create a new order
+// Utility function to find product by ID in different collections
+const findProductById = async (productId) => {
+    return await BangleData.findById(productId) ||
+           await ChainData.findById(productId) ||
+           await EarringData.findById(productId) ||
+           await MangalsutraData.findById(productId) ||
+           await PendantData.findById(productId) ||
+           await RingData.findById(productId);
+};
+
+// ✅ Create a new order
 const createOrder = asyncHandler(async (req, res) => {
-    const { userId, totalAmount, orderQuantity, productId } = req.body;
+    const { userId, totalAmount, orderQuantity, products } = req.body; // products is an array
 
-    const newOrder = await Order.create({ userId, totalAmount, orderQuantity, productId });
+    // Fetch product details
+    const productDetails = await Promise.all(
+        products.map(async (product) => {
+            return await findProductById(product.productId);
+        })
+    );
 
-    // ✅ Ensure order is added to user's order list
+    if (productDetails.includes(null)) {
+        throw new apiError(404, "One or more products not found");
+    }
+
+    // Create order
+    const newOrder = await Order.create({
+        userId,
+        totalAmount,
+        orderQuantity,
+        products,
+        orderDetails: productDetails,
+    });
+
+    // Add order to user's order list
     await User.findByIdAndUpdate(userId, { $push: { userOrders: newOrder._id } });
 
     return res.status(201).json(new apiResponse(201, newOrder, "Order created successfully"));
 });
 
-
-// Get all orders
+// ✅ Get all orders
 const getAllOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find().populate("userId", "fullName email");
+    const orders = await Order.find().populate("userId", "-password -refreshToken -accessToken");
 
-    return res.status(200).json(
-        new apiResponse(200, orders, "Orders retrieved successfully")
+    // Fetch product details for each order
+    const updatedOrders = await Promise.all(
+        orders.map(async (order) => {
+            const productDetails = await Promise.all(
+                order.products.map(async (product) => {
+                    return await findProductById(product.productId);
+                })
+            );
+
+            return { ...order.toObject(), productDetails };
+        })
     );
+
+    return res.status(200).json(new apiResponse(200, updatedOrders, "Orders retrieved successfully"));
 });
 
-// Get an order by ID
+// ✅ Get an order by ID
 const getOrderById = asyncHandler(async (req, res) => {
     const { orderId } = req.body;
 
-    const order = await Order.findById(orderId).populate("userId", "fullName email");
+    const order = await Order.findById(orderId).populate("userId", "-password -refreshToken -accessToken -userOrders");
 
     if (!order) {
         throw new apiError(404, "Order not found");
     }
 
+    // Fetch product details
+    const productDetails = await Promise.all(
+        order.products.map(async (product) => {
+            return await findProductById(product.productId);
+        })
+    );
+
     return res.status(200).json(
-        new apiResponse(200, order, "Order retrieved successfully")
+        new apiResponse(200, { ...order.toObject(), orderDetails: productDetails }, "Order retrieved successfully")
     );
 });
 
-// Update order status
+// ✅ Update order status
 const updateOrderStatus = asyncHandler(async (req, res) => {
-    
     const { orderStatus, orderId } = req.body;
 
-    if (!["pending", "Success", "Cancle"].includes(orderStatus)) {
+    if (!["pending", "Success", "Cancel"].includes(orderStatus)) {
         throw new apiError(400, "Invalid order status");
     }
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-        orderId,
-        { orderStatus },
-        { new: true }
-    );
+    const updatedOrder = await Order.findByIdAndUpdate(orderId, { orderStatus }, { new: true });
 
     if (!updatedOrder) {
         throw new apiError(404, "Order not found");
     }
 
-    return res.status(200).json(
-        new apiResponse(200, updatedOrder, "Order status updated successfully")
-    );
+    return res.status(200).json(new apiResponse(200, updatedOrder, "Order status updated successfully"));
 });
 
-// Delete an order
+// ✅ Delete an order
 const deleteOrder = asyncHandler(async (req, res) => {
     const { orderId } = req.body;
 
+    // ✅ Find the order first
     const deletedOrder = await Order.findByIdAndDelete(orderId);
 
     if (!deletedOrder) {
         throw new apiError(404, "Order not found");
     }
 
-    return res.status(200).json(
-        new apiResponse(200, {}, "Order deleted successfully")
-    );
+    // ✅ Remove the order ID from the user's `userOrders` array
+    await User.findByIdAndUpdate(deletedOrder.userId, {
+        $pull: { userOrders: orderId }
+    });
+
+    return res.status(200).json(new apiResponse(200, {}, "Order deleted successfully"));
 });
+
 
 export {
     createOrder,
@@ -87,5 +136,3 @@ export {
     updateOrderStatus,
     deleteOrder
 };
-
-
