@@ -1,4 +1,4 @@
-import { RingData } from "../../models/Product_Models/ringData.model.js";
+import {RingData} from "../../models/Product_Models/ringData.model.js"
 import { Admin } from "../../models/admin.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { apiError } from "../../utils/apiError.js";

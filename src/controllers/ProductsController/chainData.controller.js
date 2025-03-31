@@ -1,4 +1,4 @@
-import { ChainData } from "../../models/Product_Models/chainData.model.js";
+import {ChainData} from "../../models/Product_Models/chainData.model.js"
 import { Admin } from "../../models/admin.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { apiError } from "../../utils/apiError.js";

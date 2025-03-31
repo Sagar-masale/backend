@@ -1,4 +1,4 @@
-import { BangleData } from "../../models/Product_Models/bangleData.model.js";
+import {BangleData} from "../../models/Product_Models/bangleData.model.js"
 import { Admin } from "../../models/admin.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { apiError } from "../../utils/apiError.js";
