@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "a backend at chai aur code ",
+  "description": "PBS backend",
   "main": "index.js",
   "type": "module",
   "scripts": {
