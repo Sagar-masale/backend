@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
-import { Review } from "../models/review.model.js";
+import { Review } from "../models/userReview.model.js";
 
 // Create Review
 const createReview = asyncHandler(async (req, res) => {
@@ -23,9 +23,8 @@ const createReview = asyncHandler(async (req, res) => {
     return res.status(201).json(new apiResponse(201, review, "Review added successfully"));
 });
 
-// Get Reviews by Product ID
 const getReviewsByProduct = asyncHandler(async (req, res) => {
-    const { productId } = req.params;
+    const { productId } = req.query; // Change from req.body to req.query
 
     if (!productId) {
         throw new apiError(400, "Product ID is required");
@@ -36,9 +35,15 @@ const getReviewsByProduct = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, reviews, "Reviews fetched successfully"));
 });
 
+
+const getAllReview = asyncHandler(async( req, res) => {
+    const allReviewa = await Review.find();
+    return res.status(200).json(new apiResponse(200, allReviewa, "Reviews fetched successfully"));
+})
+
 // Get Reviews by User ID
 const getReviewsByUser = asyncHandler(async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.body;
 
     if (!userId) {
         throw new apiError(400, "User ID is required");
@@ -72,7 +77,7 @@ const updateReview = asyncHandler(async (req, res) => {
 
 // Delete Review
 const deleteReview = asyncHandler(async (req, res) => {
-    const { reviewId } = req.params;
+    const { reviewId } = req.body;
 
     if (!reviewId) {
         throw new apiError(400, "Review ID is required");
@@ -92,5 +97,6 @@ export {
     getReviewsByProduct,
     getReviewsByUser,
     updateReview,
-    deleteReview
+    deleteReview,
+    getAllReview
 };

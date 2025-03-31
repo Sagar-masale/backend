@@ -11,7 +11,7 @@ import {
 
     orderRouter.route("/add-order").post(createOrder);
     orderRouter.route("/getAll-orders").get(getAllOrders);
-    orderRouter.route("/getUser-order").get(getOrderById);
+    orderRouter.route("/getUser-order").post(getOrderById);
     orderRouter.route("/updateOrder").put(updateOrderStatus);
     orderRouter.route("/deleteOrder").delete(deleteOrder);
 

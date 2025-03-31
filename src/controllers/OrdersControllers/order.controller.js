@@ -72,31 +72,36 @@ const getAllOrders = asyncHandler(async (req, res) => {
 
 // ✅ Get an order by ID
 const getOrderById = asyncHandler(async (req, res) => {
-    const { orderId } = req.body;
+    const { orderIds } = req.body; // Expecting an array
 
-    const order = await Order.findById(orderId).populate("userId", "-password -refreshToken -accessToken -userOrders");
 
-    if (!order) {
-        throw new apiError(404, "Order not found");
+
+    // Fetch multiple orders using `find`
+    const orders = await Order.find({ _id: { $in: orderIds } })
+        .populate("userId", "-password -refreshToken -accessToken -userOrders");
+
+    if (!orders || orders.length === 0) {
+        throw new apiError(404, "Orders not found");
     }
 
-    // Fetch product details
-    const productDetails = await Promise.all(
-        order.products.map(async (product) => {
-            return await findProductById(product.productId);
+    // Fetch product details for all orders
+    const ordersWithDetails = await Promise.all(
+        orders.map(async (order) => {
+            const productDetails = await Promise.all(
+                order.products.map(async (product) => await findProductById(product.productId))
+            );
+            return { ...order.toObject(), orderDetails: productDetails };
         })
     );
 
-    return res.status(200).json(
-        new apiResponse(200, { ...order.toObject(), orderDetails: productDetails }, "Order retrieved successfully")
-    );
+    return res.status(200).json(new apiResponse(200, ordersWithDetails, "Orders retrieved successfully"));
 });
 
 // ✅ Update order status
 const updateOrderStatus = asyncHandler(async (req, res) => {
     const { orderStatus, orderId } = req.body;
 
-    if (!["pending", "Success", "Cancel"].includes(orderStatus)) {
+    if (!["Pending", "Success", "Canceled"].includes(orderStatus)) {
         throw new apiError(400, "Invalid order status");
     }
 

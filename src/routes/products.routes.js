@@ -5,8 +5,21 @@ import { getPendantDataWithAdmin, getPendantData } from "../controllers/Products
 import { getMangalsutraDataWithAdmin, getMangalsutraData } from "../controllers/ProductsController/mangalsutraData.controller.js"
 import { getBangleDataWithAdmin, getBangleData } from "../controllers/ProductsController/bangleData.controller.js"
 import { getChainDataWithAdmin, getChainData } from "../controllers/ProductsController/chainData.controller.js"
+
+import { 
+  createReview,
+  getReviewsByProduct,
+  getReviewsByUser,
+  updateReview,
+  deleteReview,
+  getAllReview
+} from "../controllers/userReview.controller.js"
+
 import {upload} from "../middlewares/multer.middleware.js"
-// Initialize routers
+
+const reviewRouter = Router();
+
+
 const ringDataRouter = Router();
 const earringDataRouter = Router();
 const pendantDataRouter = Router();
@@ -44,18 +57,26 @@ bangleDataRouter
   .post(upload.array("ProductImages", 10), getBangleDataWithAdmin);
 bangleDataRouter.route("/All-bangles").get(getBangleData);
 
-// Chain routes
+
 chainDataRouter
   .route("/add-chains")
   .post(upload.array("ProductImages", 10), getChainDataWithAdmin);
 chainDataRouter.route("/All-chains").get(getChainData)
 
-// Export all routers
+
+reviewRouter.route("/add-review").post(createReview);
+reviewRouter.route("/get-reviewBy-productId").get(getReviewsByProduct);
+reviewRouter.route("/get-reviewBy-userId").get(getReviewsByUser);
+reviewRouter.route("/update-review").put(updateReview);
+reviewRouter.route("/delete-review").delete(deleteReview);
+reviewRouter.route("/getAll-reviews").get(getAllReview);
+
 export {
   ringDataRouter,
   earringDataRouter,
   pendantDataRouter,
   mangalsutraDataRouter,
   bangleDataRouter,
-  chainDataRouter
+  chainDataRouter,
+  reviewRouter
 };  
