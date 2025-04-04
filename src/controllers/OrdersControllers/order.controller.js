@@ -3,12 +3,12 @@ import { apiError } from "../../utils/apiError.js";
 import { apiResponse } from "../../utils/apiResponse.js";
 import { Order } from "../../models/Orders/order.model.js";
 import { User } from "../../models/user.model.js";
-import { BangleData } from "../../models/Product_Models/bangleData.model.js";
-import { ChainData } from "../../models/Product_Models/chainData.model.js";
-import { EarringData } from "../../models/Product_Models/earringData.model.js";
-import { MangalsutraData } from "../../models/Product_Models/mangalsutraData.model.js";
-import { PendantData } from "../../models/Product_Models/pendantData.model.js";
-import { RingData } from "../../models/Product_Models/ringData.model.js";
+import { BangleData } from "../../models/bangleData.model.js";
+import { ChainData } from "../../models/chainData.model.js";
+import { EarringData } from "../../models/earringData.model.js";
+import { MangalsutraData } from "../../models/mangalsutraData.model.js";
+import { PendantData } from "../../models/pendantData.model.js";
+import { RingData } from "../../models/ringData.model.js";
 
 // Utility function to find product by ID in different collections
 const findProductById = async (productId) => {

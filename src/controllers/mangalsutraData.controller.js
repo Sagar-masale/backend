@@ -1,4 +1,4 @@
-import { MangalsutraData } from "../models/Product_Models/mangalsutraData.model.js";
+import { MangalsutraData } from "../models/mangalsutraData.model.js";
 import { Admin } from "../models/admin.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
