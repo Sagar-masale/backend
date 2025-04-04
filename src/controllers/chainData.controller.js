@@ -1,14 +1,13 @@
-import {RingData} from "../../models/Product_Models/RingData.model.js"
-import { Admin } from "../../models/admin.model.js";
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { apiError } from "../../utils/apiError.js";
-import { apiResponse } from "../../utils/apiResponse.js";
-import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import {ChainData} from "../models/Product_Models/chainData.model.js"
+import { Admin } from "../models/admin.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-
-// Controller to handle adding ring data
-const getRingDataWithAdmin = asyncHandler(async (req, res) => {
-  // console.log("Received files:", req.files); // Debug log for files
+// Controller to handle adding chain data
+const getChainDataWithAdmin = asyncHandler(async (req, res) => {
+  console.log("Received files:", req.files); // Debug log for files
 
   const {
     ProductImages,
@@ -20,7 +19,6 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductGender,
     adminId,
   } = req.body;
-  
 
   const files = req.files;
 
@@ -32,8 +30,8 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   if (
     !ProductName ||
     !ProductCategory ||
-    !ProductPrice  ||
-    !ProductQty  ||
+    !ProductPrice ||
+    !ProductQty ||
     !ProductDescription ||
     !ProductGender ||
     !adminId
@@ -58,7 +56,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     })
   );
 
-  const newRing = await RingData.create({
+  const newChain = await ChainData.create({
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
@@ -70,26 +68,26 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json(
-    new apiResponse(201, "Ring data added successfully", {
-      ringData: newRing,
+    new apiResponse(201, "Chain data added successfully", {
+      chainData: newChain,
     })
   );
 });
 
-const getRingData = asyncHandler(async ( req, res ) => {
+const getChainData = asyncHandler(async (req, res) => {
   try {
-    const rings = await RingData.find(); // Fetch all rings from the database
+    const chains = await ChainData.find(); // Fetch all chains from the database
 
-    if (!rings || rings.length === 0) {
-      throw new apiError(404, "No rings found");
+    if (!chains || chains.length === 0) {
+      throw new apiError(404, "No chains found");
     }
 
     res.status(200).json(
-      new apiResponse(200, "Rings fetched successfully", { rings })
+      new apiResponse(200, "Chains fetched successfully", { chains })
     );
   } catch (error) {
-    throw new apiError(500, "Error fetching ring data");
+    throw new apiError(500, "Error fetching chain data");
   }
 });
 
-export { getRingDataWithAdmin, getRingData };
+export { getChainDataWithAdmin, getChainData };

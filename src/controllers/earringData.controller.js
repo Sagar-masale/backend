@@ -1,12 +1,12 @@
-import {BangleData} from "../../models/Product_Models/bangleData.model.js"
-import { Admin } from "../../models/admin.model.js";
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { apiError } from "../../utils/apiError.js";
-import { apiResponse } from "../../utils/apiResponse.js";
-import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import { EarringData } from "../models/Product_Models/earringData.model.js";
+import { Admin } from "../models/admin.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding bangle data
-const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
+// Controller to handle adding earring data
+const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
   console.log("Received files:", req.files); // Debug log for files
 
   const {
@@ -56,7 +56,7 @@ const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
     })
   );
 
-  const newBangle = await BangleData.create({
+  const newEarring = await EarringData.create({
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
@@ -68,26 +68,27 @@ const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json(
-    new apiResponse(201, "Bangle data added successfully", {
-      bangleData: newBangle,
+    new apiResponse(201, "Earring data added successfully", {
+      earringData: newEarring,
     })
   );
 });
 
-const getBangleData = asyncHandler(async (req, res) => {
+const getEarringData = asyncHandler(async (req, res) => {
   try {
-    const bangles = await BangleData.find(); // Fetch all bangles from the database
+    const earrings = await EarringData.find(); // Fetch all earrings from the database
 
-    if (!bangles || bangles.length === 0) {
-      throw new apiError(404, "No bangles found");
+    if (!earrings || earrings.length === 0) {
+      throw new apiError(404, "No earrings found");
     }
 
     res.status(200).json(
-      new apiResponse(200, "Bangles fetched successfully", { bangles })
+      new apiResponse(200, "Earrings fetched successfully", { earrings })
     );
   } catch (error) {
-    throw new apiError(500, "Error fetching bangle data");
+    throw new apiError(500, "Error fetching earring data");
   }
 });
 
-export { getBangleDataWithAdmin, getBangleData };
+export { getEarringDataWithAdmin, getEarringData };
+

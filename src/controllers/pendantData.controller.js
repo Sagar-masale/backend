@@ -1,12 +1,12 @@
-import { MangalsutraData } from "../../models/Product_Models/mangalsutraData.model.js";
-import { Admin } from "../../models/admin.model.js";
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { apiError } from "../../utils/apiError.js";
-import { apiResponse } from "../../utils/apiResponse.js";
-import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import { PendantData } from "../models/Product_Models/pendantData.model.js"
+import { Admin } from "../models/admin.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding mangalsutra data
-const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
+// Controller to handle adding pendant data
+const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
   console.log("Received files:", req.files); // Debug log for files
 
   const {
@@ -56,7 +56,7 @@ const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
     })
   );
 
-  const newMangalsutra = await MangalsutraData.create({
+  const newPendant = await PendantData.create({
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
@@ -68,26 +68,26 @@ const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json(
-    new apiResponse(201, "Mangalsutra data added successfully", {
-      mangalsutraData: newMangalsutra,
+    new apiResponse(201, "Pendant data added successfully", {
+      pendantData: newPendant,
     })
   );
 });
 
-const getMangalsutraData = asyncHandler(async (req, res) => {
+const getPendantData = asyncHandler(async (req, res) => {
   try {
-    const mangalsutras = await MangalsutraData.find(); // Fetch all mangalsutras from the database
+    const pendants = await PendantData.find(); // Fetch all pendants from the database
 
-    if (!mangalsutras || mangalsutras.length === 0) {
-      throw new apiError(404, "No mangalsutras found");
+    if (!pendants || pendants.length === 0) {
+      throw new apiError(404, "No pendants found");
     }
 
     res.status(200).json(
-      new apiResponse(200, "Mangalsutras fetched successfully", { mangalsutras })
+      new apiResponse(200, "Pendants fetched successfully", { pendants })
     );
   } catch (error) {
-    throw new apiError(500, "Error fetching mangalsutra data");
+    throw new apiError(500, "Error fetching pendant data");
   }
 });
 
-export { getMangalsutraDataWithAdmin, getMangalsutraData };
+export { getPendantDataWithAdmin, getPendantData };

@@ -1,13 +1,14 @@
-import { PendantData } from "../../models/Product_Models/pendantData.model.js"
-import { Admin } from "../../models/admin.model.js";
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { apiError } from "../../utils/apiError.js";
-import { apiResponse } from "../../utils/apiResponse.js";
-import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import {RingData} from "../models/Product_Models/ringData.model.js"
+import { Admin } from "../models/admin.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding pendant data
-const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
+
+// Controller to handle adding ring data
+const getRingDataWithAdmin = asyncHandler(async (req, res) => {
+  // console.log("Received files:", req.files); // Debug log for files
 
   const {
     ProductImages,
@@ -19,6 +20,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     ProductGender,
     adminId,
   } = req.body;
+  
 
   const files = req.files;
 
@@ -30,8 +32,8 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
   if (
     !ProductName ||
     !ProductCategory ||
-    !ProductPrice ||
-    !ProductQty ||
+    !ProductPrice  ||
+    !ProductQty  ||
     !ProductDescription ||
     !ProductGender ||
     !adminId
@@ -56,7 +58,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     })
   );
 
-  const newPendant = await PendantData.create({
+  const newRing = await RingData.create({
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
@@ -68,26 +70,26 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json(
-    new apiResponse(201, "Pendant data added successfully", {
-      pendantData: newPendant,
+    new apiResponse(201, "Ring data added successfully", {
+      ringData: newRing,
     })
   );
 });
 
-const getPendantData = asyncHandler(async (req, res) => {
+const getRingData = asyncHandler(async ( req, res ) => {
   try {
-    const pendants = await PendantData.find(); // Fetch all pendants from the database
+    const rings = await RingData.find(); // Fetch all rings from the database
 
-    if (!pendants || pendants.length === 0) {
-      throw new apiError(404, "No pendants found");
+    if (!rings || rings.length === 0) {
+      throw new apiError(404, "No rings found");
     }
 
     res.status(200).json(
-      new apiResponse(200, "Pendants fetched successfully", { pendants })
+      new apiResponse(200, "Rings fetched successfully", { rings })
     );
   } catch (error) {
-    throw new apiError(500, "Error fetching pendant data");
+    throw new apiError(500, "Error fetching ring data");
   }
 });
 
-export { getPendantDataWithAdmin, getPendantData };
+export { getRingDataWithAdmin, getRingData };

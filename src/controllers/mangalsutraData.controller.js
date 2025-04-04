@@ -1,12 +1,12 @@
-import { EarringData } from "../../models/Product_Models/earringData.model.js";
-import { Admin } from "../../models/admin.model.js";
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { apiError } from "../../utils/apiError.js";
-import { apiResponse } from "../../utils/apiResponse.js";
-import { uploadOnCloudinary } from "../../utils/cloudinary.js";
+import { MangalsutraData } from "../models/Product_Models/mangalsutraData.model.js";
+import { Admin } from "../models/admin.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding earring data
-const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
+// Controller to handle adding mangalsutra data
+const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
   console.log("Received files:", req.files); // Debug log for files
 
   const {
@@ -56,7 +56,7 @@ const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
     })
   );
 
-  const newEarring = await EarringData.create({
+  const newMangalsutra = await MangalsutraData.create({
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
@@ -68,27 +68,26 @@ const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json(
-    new apiResponse(201, "Earring data added successfully", {
-      earringData: newEarring,
+    new apiResponse(201, "Mangalsutra data added successfully", {
+      mangalsutraData: newMangalsutra,
     })
   );
 });
 
-const getEarringData = asyncHandler(async (req, res) => {
+const getMangalsutraData = asyncHandler(async (req, res) => {
   try {
-    const earrings = await EarringData.find(); // Fetch all earrings from the database
+    const mangalsutras = await MangalsutraData.find(); // Fetch all mangalsutras from the database
 
-    if (!earrings || earrings.length === 0) {
-      throw new apiError(404, "No earrings found");
+    if (!mangalsutras || mangalsutras.length === 0) {
+      throw new apiError(404, "No mangalsutras found");
     }
 
     res.status(200).json(
-      new apiResponse(200, "Earrings fetched successfully", { earrings })
+      new apiResponse(200, "Mangalsutras fetched successfully", { mangalsutras })
     );
   } catch (error) {
-    throw new apiError(500, "Error fetching earring data");
+    throw new apiError(500, "Error fetching mangalsutra data");
   }
 });
 
-export { getEarringDataWithAdmin, getEarringData };
-
+export { getMangalsutraDataWithAdmin, getMangalsutraData };

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { getRingDataWithAdmin, getRingData } from "../controllers/ProductsController/ringData.controller.js"
-import { getEarringDataWithAdmin, getEarringData } from "../controllers/ProductsController/earringData.controller.js"
-import { getPendantDataWithAdmin, getPendantData } from "../controllers/ProductsController/pendantData.controller.js"
-import { getMangalsutraDataWithAdmin, getMangalsutraData } from "../controllers/ProductsController/mangalsutraData.controller.js"
-import { getBangleDataWithAdmin, getBangleData } from "../controllers/ProductsController/bangleData.controller.js"
-import { getChainDataWithAdmin, getChainData } from "../controllers/ProductsController/chainData.controller.js"
+import { getRingDataWithAdmin, getRingData } from "../controllers/ringData.controller.js"
+import { getEarringDataWithAdmin, getEarringData } from "../controllers/earringData.controller.js"
+import { getPendantDataWithAdmin, getPendantData } from "../controllers/pendantData.controller.js"
+import { getMangalsutraDataWithAdmin, getMangalsutraData } from "../controllers/mangalsutraData.controller.js"
+import { getBangleDataWithAdmin, getBangleData } from "../controllers/bangleData.controller.js"
+import { getChainDataWithAdmin, getChainData } from "../controllers/chainData.controller.js"
 
 import { 
   createReview,
