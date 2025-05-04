@@ -76,6 +76,8 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   );
 });
 
+
+
 const getRingData = asyncHandler(async ( req, res ) => {
   try {
     const rings = await RingData.find(); // Fetch all rings from the database
@@ -92,4 +94,28 @@ const getRingData = asyncHandler(async ( req, res ) => {
   }
 });
 
-export { getRingDataWithAdmin, getRingData };
+
+const deleteRingData = asyncHandler(async (req, res) => {
+  const { id } = req.body; // Get the ID from the request body
+
+  if (!id) {
+    throw new apiError(400, "Ring ID is required");
+  }
+
+  const ring = await RingData.findById(id); // Find the ring by ID
+
+  if (!ring) {
+    throw new apiError(404, "Ring not found");
+  }
+
+  // Use deleteOne instead of remove()
+  await RingData.deleteOne({ _id: id }); // Delete the ring data from the database
+
+  res.status(200).json(
+    new apiResponse(200, "Ring data deleted successfully", { id })
+  );
+});
+
+
+
+export { getRingDataWithAdmin, getRingData, deleteRingData  };

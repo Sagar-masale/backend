@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getRingDataWithAdmin, getRingData } from "../controllers/ringData.controller.js"
+import { getRingDataWithAdmin, getRingData, deleteRingData  } from "../controllers/ringData.controller.js"
 import { getEarringDataWithAdmin, getEarringData } from "../controllers/earringData.controller.js"
 import { getPendantDataWithAdmin, getPendantData } from "../controllers/pendantData.controller.js"
 import { getMangalsutraDataWithAdmin, getMangalsutraData } from "../controllers/mangalsutraData.controller.js"
@@ -32,6 +32,7 @@ ringDataRouter
   .route("/add-ring")
   .post(upload.array("ProductImages", 10), getRingDataWithAdmin);
 ringDataRouter.route("/All-rings").get(getRingData);
+ringDataRouter.route("/delete-ring").delete(deleteRingData);
 
 // Earring routes
 earringDataRouter
