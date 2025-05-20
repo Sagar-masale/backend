@@ -6,68 +6,70 @@ import { Admin } from "../models/admin.model.js";
 
 
 
-// // Boiler plate 
-// export const verifyJWT =asyncHandler(async(req, _, next) => {
+
+
+// export const verifyJWT = asyncHandler(async (req, _, next) => {
 //     try {
-//         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
-    
-//         if(!token) {
-//             throw new apiError(401, "Unauthorized request")
-//         }
-    
-//         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    
-//         const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
-//         const admin = await Admin.findById(decodedToken?._id).select("-password -refreshToken")
-    
-//         if(!user) {
-//             throw new apiError(401, "Invalid Access Token")
-//         }
-    
-//         req.user = user;
-//         next()
-
-//         if(!admin) {
-//             throw new apiError(401, "Invalid Access Token")
+//         // Extract the token from cookies or Authorization header
+//         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+//         if (!token) {
+//             throw new apiError(401, "Unauthorized request");
 //         }
 
-//         req.admin = admin;
-//         next()
-    
+//         // Verify the token
+//         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+//         // Check if the token belongs to a User
+//         const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+//         if (user) {
+//             req.user = user; // Attach the user to the request
+//             return next(); // Continue to the next middleware or route
+//         }
+
+//         // Check if the token belongs to an Admin
+//         const admin = await Admin.findById(decodedToken?._id).select("-password -refreshToken");
+//         if (admin) {
+//             req.admin = admin; // Attach the admin to the request
+//             return next(); // Continue to the next middleware or route
+//         }
+
+//         // If neither User nor Admin is found, throw an error
+//         throw new apiError(401, "Invalid Access Token");
 //     } catch (error) {
-//         throw new apiError(401, error?.message || "Invalid access token")
+//         // Handle token verification or other errors
+//         throw new apiError(401, error?.message || "Invalid access token");
 //     }
-// })
+// });
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
-        // Extract the token from cookies or Authorization header
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
             throw new apiError(401, "Unauthorized request");
         }
 
-        // Verify the token
+        // Try verifying the token
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-        // Check if the token belongs to a User
         const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
         if (user) {
-            req.user = user; // Attach the user to the request
-            return next(); // Continue to the next middleware or route
+            req.user = user;
+            return next();
         }
 
-        // Check if the token belongs to an Admin
         const admin = await Admin.findById(decodedToken?._id).select("-password -refreshToken");
         if (admin) {
-            req.admin = admin; // Attach the admin to the request
-            return next(); // Continue to the next middleware or route
+            req.admin = admin;
+            return next();
         }
 
-        // If neither User nor Admin is found, throw an error
         throw new apiError(401, "Invalid Access Token");
+
     } catch (error) {
-        // Handle token verification or other errors
+        if (error.name === "TokenExpiredError") {
+            throw new apiError(401, "Access Token Expired");
+        }
+
         throw new apiError(401, error?.message || "Invalid access token");
     }
 });
