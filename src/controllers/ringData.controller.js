@@ -117,5 +117,29 @@ const deleteRingData = asyncHandler(async (req, res) => {
 });
 
 
+const updateRingData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
 
-export { getRingDataWithAdmin, getRingData, deleteRingData  };
+  if (!id) {
+    throw new apiError(400, "Ring ID is required");
+  }
+
+  const updatedRing = await RingData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedRing) {
+    throw new apiError(404, "Ring not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Ring data updated successfully", updatedRing)
+  );
+});
+
+
+
+
+
+export { getRingDataWithAdmin, getRingData, deleteRingData, updateRingData  };
