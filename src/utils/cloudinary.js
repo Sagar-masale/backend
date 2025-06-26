@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-
 import fs from "fs";
 
 // Validate Cloudinary configuration
@@ -23,17 +22,29 @@ const uploadOnCloudinary = async (localFilePath) => {
 
     try {
         const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto", // Automatically detect the file type
-            folder:'Product Images'
+            resource_type: "auto",
+            folder: "Product Images",
         });
         console.log("File uploaded successfully:", response.url);
+
+        // ✅ Remove the file from local storage
+        fs.unlinkSync(localFilePath); // or use await fs.promises.unlink(localFilePath);
+        console.log("Local file deleted after upload.");
+
         return response;
     } catch (error) {
         console.error("Error uploading to Cloudinary:", error.message);
+        
+        // ❌ Optionally clean up local file if upload fails
+        try {
+            fs.unlinkSync(localFilePath);
+            console.log("Local file deleted due to failed upload.");
+        } catch (err) {
+            console.error("Failed to delete local file after error:", err.message);
+        }
+
         return null;
     }
 };
-
-
 
 export { uploadOnCloudinary };

@@ -89,5 +89,34 @@ const getPendantData = asyncHandler(async (req, res) => {
     throw new apiError(500, "Error fetching pendant data");
   }
 });
+const getPendantById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
 
-export { getPendantDataWithAdmin, getPendantData };
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const pendant = await PendantData.findById(productId); // Ensure PendantData is imported
+
+    if (!pendant) {
+      return res.status(404).json(
+        new apiResponse(404, "Pendant not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Pendant fetched successfully", { product: pendant })
+    );
+  } catch (error) {
+    console.error("Error fetching pendant by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching pendant by ID", null)
+    );
+  }
+});
+
+
+export { getPendantDataWithAdmin, getPendantData, getPendantById };

@@ -94,6 +94,35 @@ const getRingData = asyncHandler(async ( req, res ) => {
   }
 });
 
+const getRingById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const ring = await RingData.findById(productId);
+
+    if (!ring) {
+      return res.status(404).json(
+        new apiResponse(404, "Ring not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Ring fetched successfully", { product: ring })
+    );
+  } catch (error) {
+    console.error("Error fetching ring by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching ring by ID", null)
+    );
+  }
+});
+
 
 const deleteRingData = asyncHandler(async (req, res) => {
   const { id } = req.body; // Get the ID from the request body
@@ -142,4 +171,4 @@ const updateRingData = asyncHandler(async (req, res) => {
 
 
 
-export { getRingDataWithAdmin, getRingData, deleteRingData, updateRingData  };
+export { getRingDataWithAdmin, getRingData, deleteRingData, updateRingData, getRingById  };

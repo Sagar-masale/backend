@@ -90,4 +90,34 @@ const getMangalsutraData = asyncHandler(async (req, res) => {
   }
 });
 
-export { getMangalsutraDataWithAdmin, getMangalsutraData };
+const getMangalsutraById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const mangalsutra = await MangalsutraData.findById(productId); // Make sure this model is imported
+
+    if (!mangalsutra) {
+      return res.status(404).json(
+        new apiResponse(404, "Mangalsutra not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Mangalsutra fetched successfully", { product: mangalsutra })
+    );
+  } catch (error) {
+    console.error("Error fetching mangalsutra by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching mangalsutra by ID", null)
+    );
+  }
+});
+
+
+export { getMangalsutraDataWithAdmin, getMangalsutraData, getMangalsutraById };

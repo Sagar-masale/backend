@@ -90,4 +90,34 @@ const getBangleData = asyncHandler(async (req, res) => {
   }
 });
 
-export { getBangleDataWithAdmin, getBangleData };
+const getBangleById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const bangle = await BangleData.findById(productId); // Make sure BangleData is imported
+
+    if (!bangle) {
+      return res.status(404).json(
+        new apiResponse(404, "Bangle not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Bangle fetched successfully", { product: bangle })
+    );
+  } catch (error) {
+    console.error("Error fetching bangle by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching bangle by ID", null)
+    );
+  }
+});
+
+
+export { getBangleDataWithAdmin, getBangleData, getBangleById };

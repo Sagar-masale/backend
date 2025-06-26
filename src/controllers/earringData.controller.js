@@ -90,5 +90,35 @@ const getEarringData = asyncHandler(async (req, res) => {
   }
 });
 
-export { getEarringDataWithAdmin, getEarringData };
+const getEarringById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const earring = await EarringData.findById(productId); // Make sure EarringData is imported
+
+    if (!earring) {
+      return res.status(404).json(
+        new apiResponse(404, "Earring not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Earring fetched successfully", { product: earring })
+    );
+  } catch (error) {
+    console.error("Error fetching earring by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching earring by ID", null)
+    );
+  }
+});
+
+
+export { getEarringDataWithAdmin, getEarringData, getEarringById };
 

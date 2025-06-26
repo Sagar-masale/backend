@@ -90,4 +90,34 @@ const getChainData = asyncHandler(async (req, res) => {
   }
 });
 
-export { getChainDataWithAdmin, getChainData };
+const getChainById = asyncHandler(async (req, res) => {
+  try {
+    const { productId } = req.query;
+
+    if (!productId) {
+      return res.status(400).json(
+        new apiResponse(400, "Product ID is required", null)
+      );
+    }
+
+    const chain = await ChainData.findById(productId); // Ensure ChainData is imported
+
+    if (!chain) {
+      return res.status(404).json(
+        new apiResponse(404, "Chain not found", null)
+      );
+    }
+
+    res.status(200).json(
+      new apiResponse(200, "Chain fetched successfully", { product: chain })
+    );
+  } catch (error) {
+    console.error("Error fetching chain by ID:", error);
+    res.status(500).json(
+      new apiResponse(500, "Error fetching chain by ID", null)
+    );
+  }
+});
+
+
+export { getChainDataWithAdmin, getChainData, getChainById };
