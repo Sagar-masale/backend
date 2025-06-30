@@ -119,6 +119,49 @@ const getEarringById = asyncHandler(async (req, res) => {
   }
 });
 
+const updateEarringData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
 
-export { getEarringDataWithAdmin, getEarringData, getEarringById };
+  if (!id) {
+    throw new apiError(400, "Earring ID is required");
+  }
+
+  const updatedEarring = await EarringData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedEarring) {
+    throw new apiError(404, "Earring not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Earring data updated successfully", updatedEarring)
+  );
+});
+
+const deleteEarringData = asyncHandler(async (req, res) => {
+  const { id } = req.body; // Get the ID from the request body
+
+  if (!id) {
+    throw new apiError(400, "Earring ID is required");
+  }
+
+  const earring = await EarringData.findById(id); // Find the earring by ID
+
+  if (!earring) {
+    throw new apiError(404, "Earring not found");
+  }
+
+  // Use deleteOne instead of remove()
+  await EarringData.deleteOne({ _id: id }); // Delete the earring data from the database
+
+  res.status(200).json(
+    new apiResponse(200, "Earring data deleted successfully", { id })
+  );
+});
+
+
+
+export { getEarringDataWithAdmin, getEarringData, getEarringById, updateEarringData, deleteEarringData };
 

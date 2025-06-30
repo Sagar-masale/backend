@@ -119,5 +119,46 @@ const getChainById = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteChainData = asyncHandler(async (req, res) => {
+  const { id } = req.body;
 
-export { getChainDataWithAdmin, getChainData, getChainById };
+  if (!id) {
+    throw new apiError(400, "Chain ID is required");
+  }
+
+  const chain = await ChainData.findById(id);
+
+  if (!chain) {
+    throw new apiError(404, "Chain not found");
+  }
+
+  await ChainData.deleteOne({ _id: id });
+
+  res.status(200).json(
+    new apiResponse(200, "Chain data deleted successfully", { id })
+  );
+});
+
+const updateChainData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
+
+  if (!id) {
+    throw new apiError(400, "Chain ID is required");
+  }
+
+  const updatedChain = await ChainData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedChain) {
+    throw new apiError(404, "Chain not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Chain data updated successfully", updatedChain)
+  );
+});
+
+
+export { getChainDataWithAdmin, getChainData, getChainById, deleteChainData, updateChainData };

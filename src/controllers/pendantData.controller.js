@@ -118,5 +118,46 @@ const getPendantById = asyncHandler(async (req, res) => {
   }
 });
 
+const deletePendantData = asyncHandler(async (req, res) => {
+  const { id } = req.body; // Get the ID from the request body
 
-export { getPendantDataWithAdmin, getPendantData, getPendantById };
+  if (!id) {
+    throw new apiError(400, "Pendant ID is required");
+  }
+
+  const pendant = await PendantData.findById(id); // Find the pendant by ID
+
+  if (!pendant) {
+    throw new apiError(404, "Pendant not found");
+  }
+
+  await PendantData.deleteOne({ _id: id }); // Delete the pendant data
+
+  res.status(200).json(
+    new apiResponse(200, "Pendant data deleted successfully", { id })
+  );
+});
+
+const updatePendantData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
+
+  if (!id) {
+    throw new apiError(400, "Pendant ID is required");
+  }
+
+  const updatedPendant = await PendantData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedPendant) {
+    throw new apiError(404, "Pendant not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Pendant data updated successfully", updatedPendant)
+  );
+});
+
+
+export { getPendantDataWithAdmin, getPendantData, getPendantById, deletePendantData, updatePendantData };

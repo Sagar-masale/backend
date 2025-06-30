@@ -119,5 +119,45 @@ const getBangleById = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteBangleData = asyncHandler(async (req, res) => {
+  const { id } = req.body;
 
-export { getBangleDataWithAdmin, getBangleData, getBangleById };
+  if (!id) {
+    throw new apiError(400, "Bangle ID is required");
+  }
+
+  const bangle = await BangleData.findById(id);
+
+  if (!bangle) {
+    throw new apiError(404, "Bangle not found");
+  }
+
+  await BangleData.deleteOne({ _id: id });
+
+  res.status(200).json(
+    new apiResponse(200, "Bangle data deleted successfully", { id })
+  );
+});
+const updateBangleData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
+
+  if (!id) {
+    throw new apiError(400, "Bangle ID is required");
+  }
+
+  const updatedBangle = await BangleData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedBangle) {
+    throw new apiError(404, "Bangle not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Bangle data updated successfully", updatedBangle)
+  );
+});
+
+
+export { getBangleDataWithAdmin, getBangleData, getBangleById, deleteBangleData,updateBangleData };

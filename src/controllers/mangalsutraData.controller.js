@@ -119,5 +119,45 @@ const getMangalsutraById = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteMangalsutraData = asyncHandler(async (req, res) => {
+  const { id } = req.body;
 
-export { getMangalsutraDataWithAdmin, getMangalsutraData, getMangalsutraById };
+  if (!id) {
+    throw new apiError(400, "Mangalsutra ID is required");
+  }
+
+  const mangalsutra = await MangalsutraData.findById(id);
+
+  if (!mangalsutra) {
+    throw new apiError(404, "Mangalsutra not found");
+  }
+
+  await MangalsutraData.deleteOne({ _id: id });
+
+  res.status(200).json(
+    new apiResponse(200, "Mangalsutra data deleted successfully", { id })
+  );
+});
+const updateMangalsutraData = asyncHandler(async (req, res) => {
+  const { id, ...updateFields } = req.body;
+
+  if (!id) {
+    throw new apiError(400, "Mangalsutra ID is required");
+  }
+
+  const updatedMangalsutra = await MangalsutraData.findByIdAndUpdate(id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updatedMangalsutra) {
+    throw new apiError(404, "Mangalsutra not found");
+  }
+
+  res.status(200).json(
+    new apiResponse(200, "Mangalsutra data updated successfully", updatedMangalsutra)
+  );
+});
+
+
+export { getMangalsutraDataWithAdmin, getMangalsutraData, getMangalsutraById, deleteMangalsutraData, updateMangalsutraData  };
