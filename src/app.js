@@ -19,6 +19,7 @@ app.use(cors({
 import userRout from './routes/user.routes.js';
 import adminRout from './routes/admin.routes.js';
 import { earringDataRouter, ringDataRouter, pendantDataRouter, mangalsutraDataRouter, bangleDataRouter, chainDataRouter, reviewRouter } from './routes/products.routes.js';
+import Metalrouter from './routes/publicRoutes.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import orderRoutes from './routes/order.routes.js';
 
@@ -46,6 +47,7 @@ app.use("/api/v1/products", chainDataRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/metal_prise", Metalrouter);
 
 
 // routes declaration

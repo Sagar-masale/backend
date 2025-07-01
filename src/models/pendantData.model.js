@@ -17,7 +17,19 @@ const pendantDataSchema = new Schema(
         },
         ProductPrice: {
             type: Number,
-            required: true
+        },
+        metalType: { 
+            type: String, 
+            enum: ["gold", "silver"], 
+            required: true 
+        },
+        weightInGrams: { 
+            type: Number, 
+            required: true 
+        },
+        makingCharges: { 
+            type: Number, 
+            required: true 
         },
         ProductQty: {
             type: Number,

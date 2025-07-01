@@ -14,11 +14,11 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductImages,
     ProductName,
     ProductCategory,
-    ProductPrice,
     ProductQty,
     ProductDescription,
     ProductGender,
     adminId,
+    metalType, weightInGrams, makingCharges
   } = req.body;
   
 
@@ -32,11 +32,13 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   if (
     !ProductName ||
     !ProductCategory ||
-    !ProductPrice  ||
     !ProductQty  ||
     !ProductDescription ||
     !ProductGender ||
-    !adminId
+    !adminId ||
+    !metalType || 
+    !weightInGrams ||
+    !makingCharges
   ) {
     throw new apiError(400, "All fields are required");
   }
@@ -62,7 +64,9 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
-    ProductPrice,
+    metalType, 
+    weightInGrams, 
+    makingCharges,
     ProductQty,
     ProductDescription,
     ProductGender,

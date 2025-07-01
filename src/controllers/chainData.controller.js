@@ -13,11 +13,11 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
     ProductImages,
     ProductName,
     ProductCategory,
-    ProductPrice,
     ProductQty,
     ProductDescription,
     ProductGender,
     adminId,
+    metalType, weightInGrams, makingCharges
   } = req.body;
 
   const files = req.files;
@@ -30,7 +30,9 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
   if (
     !ProductName ||
     !ProductCategory ||
-    !ProductPrice ||
+    !metalType ||
+    !weightInGrams ||
+    !makingCharges||
     !ProductQty ||
     !ProductDescription ||
     !ProductGender ||
@@ -60,7 +62,9 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
     ProductImages: uploadedImages,
     ProductName,
     ProductCategory,
-    ProductPrice,
+    metalType ,
+    weightInGrams ,
+    makingCharges,
     ProductQty,
     ProductDescription,
     ProductGender,
