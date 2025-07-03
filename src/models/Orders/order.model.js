@@ -10,11 +10,19 @@ const orderSchema = new Schema(
     products: [
       {
           productId: { type: mongoose.Schema.Types.ObjectId, required: true },
-          orderQuantity: { type: Number, required: true }
+          orderQuantity: { type: Number, required: true },
+          price: Number,
       }
   ],
     totalAmount: {
       type: Number,
+      required: true,
+    },
+    discount:{
+      type:Number
+    },
+    totalAmountWithDiscount:{
+      type:Number,
       required: true,
     },
     orderStatus: {

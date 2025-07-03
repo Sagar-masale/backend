@@ -9,6 +9,7 @@ import { EarringData } from "../../models/earringData.model.js";
 import { MangalsutraData } from "../../models/mangalsutraData.model.js";
 import { PendantData } from "../../models/pendantData.model.js";
 import { RingData } from "../../models/ringData.model.js";
+import { disconnect } from "mongoose";
 
 // Utility function to find product by ID in different collections
 const findProductById = async (productId) => {
@@ -22,7 +23,7 @@ const findProductById = async (productId) => {
 
 // ✅ Create a new order
 const createOrder = asyncHandler(async (req, res) => {
-    const { userId, totalAmount, orderQuantity, products } = req.body; // products is an array
+    const { userId, totalAmount, orderQuantity, products,discount,totalAmountWithDiscount, } = req.body; // products is an array
 
     // Fetch product details
     const productDetails = await Promise.all(
@@ -41,6 +42,8 @@ const createOrder = asyncHandler(async (req, res) => {
         totalAmount,
         orderQuantity,
         products,
+        discount,
+        totalAmountWithDiscount,
         orderDetails: productDetails,
     });
 
