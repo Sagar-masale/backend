@@ -12,6 +12,9 @@ const orderSchema = new Schema(
           productId: { type: mongoose.Schema.Types.ObjectId, required: true },
           orderQuantity: { type: Number, required: true },
           price: Number,
+          orderProductSize: { type: String },
+          orderProductWeight: { type: Number, required: true },
+          productPrice: {type: Number}
       }
   ],
     totalAmount: {

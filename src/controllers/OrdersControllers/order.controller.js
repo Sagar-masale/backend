@@ -23,7 +23,7 @@ const findProductById = async (productId) => {
 
 // ✅ Create a new order
 const createOrder = asyncHandler(async (req, res) => {
-    const { userId, totalAmount, orderQuantity, products,discount,totalAmountWithDiscount, } = req.body; // products is an array
+    const { userId, totalAmount, orderQuantity, products, discount, totalAmountWithDiscount, } = req.body; // products is an array
 
     // Fetch product details
     const productDetails = await Promise.all(
