@@ -16,6 +16,7 @@ const orderSchema = new Schema(
           orderProductWeight: { type: Number, required: true },
           mackingCharges:{type: Number},
           orderedProductPrice:{ type: Number, required: true},
+          ProductCouponCode:{type:Number},
           productPrice: {type: Number}
       }
   ],
