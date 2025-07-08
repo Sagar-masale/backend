@@ -41,7 +41,7 @@ const couponSection = firstCouponProduct
     <p style="margin: 10px 0;">
       <strong>Coupon Applied:</strong> 
       <span style="color: #4f3267;">${'#'+firstCouponProduct.ProductCouponCode}</span><br/>
-      Please present this code at pickup.
+      Please present this coupon code at pickup.
     </p>
   `
   : "";
