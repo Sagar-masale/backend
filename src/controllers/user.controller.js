@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 // import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from 'jsonwebtoken'
-
+import { sendRegistrationEmail } from "../Auth/sendRegistrationEmail.js";
 
 const generateAccessAndRefreshToken = async(userId) => {
     try {
@@ -25,18 +25,7 @@ const generateAccessAndRefreshToken = async(userId) => {
 }
 
 const registerUser = asyncHandler( async (req, res) => {
-    // get user details from frontend.
-    // validation - not empty.
-    // check if user already exist: phoneNumber, email.
-    
 
-    // create user object - create entry in db.
-    // remove password and refresh token field from response.
-    // check for user creation.
-    // return res.
-
-
-    // console.log(req.body); 
 
 
     // get user details from frontend.
@@ -85,6 +74,7 @@ const registerUser = asyncHandler( async (req, res) => {
         if(!createdUser){
             throw new apiError(500, "somthing went wrong while regersting the user")
         }
+        await sendRegistrationEmail(email, fullName);
 
         // return true res.
         return res.status(201).json(

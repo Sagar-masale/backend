@@ -14,9 +14,9 @@ const transporter = nodemailer.createTransport({
 export const sendOtpEmail = async (email, otp) => {
     try {
         await transporter.sendMail({
-            from: `"PBS Gold Shop" <${process.env.EMAIL}>`,
+            from: `"PBS Jewellers" <${process.env.EMAIL}>`,
             to: email,
-            subject: "Your OTP for Verification – PBS Gold Shop",
+            subject: "Your OTP for Verification – PBS Jewellers",
             html: `
             <!DOCTYPE html>
             <html>
