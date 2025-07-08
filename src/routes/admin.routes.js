@@ -3,7 +3,7 @@ import { loginAdmin, logoutAdmin, refreshAccessTokenAdmin, getCurrentAdmin, regi
 // import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import metalRate from "../models/metalRate.js";
-
+import { sendProductEmail } from "../Auth/sendProductEmail .js";
 const adminRouter = Router();
 
 
@@ -14,6 +14,9 @@ adminRouter.route("/logout-admin").post(verifyJWT, logoutAdmin)
 adminRouter.route("/refresh-token-admin").post(refreshAccessTokenAdmin)
 adminRouter.route("/current-admin").get(verifyJWT, getCurrentAdmin)
 adminRouter.route("/All-Users").get(getAllUsers)
+
+
+adminRouter.route("/send-product-email").post(sendProductEmail);
 
 adminRouter.post("/set-metal-rate", async (req, res) => {
   const { gold, silver } = req.body;

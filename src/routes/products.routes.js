@@ -20,6 +20,7 @@ import {upload} from "../middlewares/multer.middleware.js"
 const reviewRouter = Router();
 
 
+
 const ringDataRouter = Router();
 const earringDataRouter = Router();
 const pendantDataRouter = Router();
@@ -89,6 +90,8 @@ reviewRouter.route("/get-reviewBy-userId").get(getReviewsByUser);
 reviewRouter.route("/update-review").put(updateReview);
 reviewRouter.route("/delete-review").delete(deleteReview);
 reviewRouter.route("/getAll-reviews").get(getAllReview);
+
+
 
 export {
   ringDataRouter,

@@ -18,7 +18,7 @@ const orderSchema = new Schema(
           },
 
           price: Number,
-          orderProductSize: { type: String },
+          orderProductSize: { type: String, default:"Default" },
           orderProductWeight: { type: Number, required: true },
           mackingCharges:{type: Number},
           orderedProductPrice:{ type: Number, required: true},
