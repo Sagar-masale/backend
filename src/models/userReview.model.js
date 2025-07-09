@@ -11,6 +11,9 @@ const reviewSchema = new Schema(
       type: String,
       required: true,
     },
+    productImage:{
+      type:String
+    },
     userName: {
       type: String,
       required: true,

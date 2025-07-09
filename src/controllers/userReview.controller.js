@@ -5,7 +5,7 @@ import { Review } from "../models/userReview.model.js";
 
 // Create Review
 const createReview = asyncHandler(async (req, res) => {
-    const { userId, productId, userName, reviewTitle, reviewRating, reviewComment } = req.body;
+    const { userId, productId, userName, reviewTitle, reviewRating, reviewComment, productImage } = req.body;
 
     if (!userId || !productId || !reviewTitle || !reviewRating || !reviewComment) {
         throw new apiError(400, "All fields are required");
@@ -17,7 +17,8 @@ const createReview = asyncHandler(async (req, res) => {
         userName,
         reviewTitle,
         reviewRating,
-        reviewComment
+        reviewComment,
+        productImage
     });
 
     return res.status(201).json(new apiResponse(201, review, "Review added successfully"));
