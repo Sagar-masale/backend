@@ -76,8 +76,8 @@ export const sendOtpEmail = async (email, otp) => {
                     <p class="footer">
                         If you did not request this, please ignore this email. 
                         <br><br>
-                        <strong>PBS Gold Shop</strong><br>
-                        <a href="https://www.pbsgoldshop.com" target="_blank">www.pbsgoldshop.com</a>
+                        <strong>PBS Jewellers</strong><br>
+                        <a href="https://pbsjewellers.vercel.app/" target="_blank">www.pbsjewellers.com</a>
                     </p>
                 </div>
             </body>

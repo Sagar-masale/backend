@@ -64,7 +64,7 @@ const couponSection = firstCouponProduct
   const html = `
     <div style="font-family: Arial, sans-serif; padding: 24px; background-color: #f9f7fc; color: #333;">
       <h2 style="color: #4f3267;">Order Confirmed!</h2>
-      <p>Your order <strong>#${shortId}</strong> has been placed successfully with PBS Gold Shop.</p>
+      <p>Your order <strong>#${shortId}</strong> has been placed successfully with PBS Jewellers.</p>
 
       <p><strong>Note:</strong> This order is for <span style="color:#4f3267;">in-store pickup only</span>. Once your items are ready, you will receive a notification to pick them up from the store.</p>
 
@@ -78,10 +78,10 @@ const couponSection = firstCouponProduct
 
       ${amountSection}
 
-      <p style="margin-top: 30px;">We appreciate your trust in PBS Gold Shop. We’ll notify you once your order is ready for pickup.</p>
+      <p style="margin-top: 30px;">We appreciate your trust in PBS Jewellers Gold Shop. We’ll notify you once your order is ready for pickup.</p>
 
       <footer style="font-size: 12px; color: #888; margin-top: 40px; border-top: 1px solid #eee; padding-top: 10px;">
-        PBS Gold Shop<br/>
+        PBS Jewellers Shop<br/>
         <a href="https://pbsjewellers.vercel.app" target="_blank">www.pbsjewellers.com</a>
       </footer>
     </div>

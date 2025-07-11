@@ -50,7 +50,7 @@ export const sendProductEmail = async (req, res) => {
   try {
     const promises = emails.map((email) =>
       transporter.sendMail({
-        from: '"PBS Jewellers" <support@pbsjewellers.com>',
+        from: '"PBS Jewellers" <pbsalegaon@gmail.com>',
         to: email,
         subject,
         html: emailHtml,
