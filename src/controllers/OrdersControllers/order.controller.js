@@ -136,15 +136,16 @@ const deleteOrder = asyncHandler(async (req, res) => {
   }
 
   // ✅ Remove the order ID from the user's `userOrders` array
-  await User.findByIdAndUpdate(deletedOrder.userId, {
-    $pull: { userOrders: orderId }
-  });
+  const user = await User.findByIdAndUpdate(
+    deletedOrder.userId,
+    { $pull: { userOrders: orderId } },
+    { new: true }
+  );
 
-  // ✅ Fetch user email
-  const user = await User.findById(deletedOrder.userId);
-
+  // ✅ Send cancellation email
   if (user?.email) {
-    await sendOrderCancellationEmail(user.email, deletedOrder); // ✅ Pass actual user email
+    const userName = user.fullName?.split(" ")[0] || "Customer";
+    await sendOrderCancellationEmail(user.email, deletedOrder, userName);
   } else {
     console.warn("User email not found for cancelled order.");
   }
