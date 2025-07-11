@@ -11,7 +11,7 @@ const generateAccessAndRefreshToken = async(adminId) => {
         const accessToken = admin.generateAccessToken()
         const refreshToken = admin.generateRefreshToken()
         
-        // assign userRefreshToken to refreshToken
+    
         admin.refreshToken = refreshToken;
         await admin.save({ validateBeforeSave: false });
 
@@ -20,7 +20,6 @@ const generateAccessAndRefreshToken = async(adminId) => {
 
 
     } catch (error) {
-        console.log('err message',error.message);
         
         throw new apiError(500, "somthing went wrong while generating refresh and access token")
     }
@@ -29,20 +28,16 @@ const generateAccessAndRefreshToken = async(adminId) => {
 const registerAdmin = asyncHandler( async (req, res) => {
 
     const {adminEmail = '', adminFullName = '', adminPassword = '', adminPhoneNumber = '', adminUserName = '' } = req.body || {};
-    // console.log("email: ", email);
 
 
-    // validation - not empty.
     if (
-        //check all user data is empty or not ( adv js )
+
         [adminEmail, adminFullName, adminPassword, adminPhoneNumber, adminUserName].some((field) => 
         field?.trim()== "")
     ) {
         throw new apiError(400, "All fields are required")
     }
 
-    
-    // check if admin already exist: phoneNumber, email.
     const existedAdmin = await  Admin.findOne({
         $or: [{ adminPhoneNumber }, { adminEmail }]
     })
@@ -53,25 +48,22 @@ const registerAdmin = asyncHandler( async (req, res) => {
         });
     }
     
-    
-    // create user object - create entry in db.
+
     const admin = await Admin.create({
         adminEmail, adminFullName, adminPassword, adminPhoneNumber, adminUserName
     })
 
-    // remove password and refresh token field from response.
+
     const createdAdmin = await Admin.findById(admin._id)
         .select(
             "-password -refreshToken"
         )
 
-        // check for admin creation.
     
         if(!createdAdmin){
             throw new apiError(500, "somthing went wrong while regersting the user")
         }
 
-        // return true res.
         return res.status(201).json(
             new apiResponse(200, createdAdmin, "admin registered successfully")
         )
@@ -79,12 +71,6 @@ const registerAdmin = asyncHandler( async (req, res) => {
 
 
 const loginAdmin = asyncHandler( async (req, res) => {
-    // req body -> data
-    // phoneNumer or email
-    // find the admin
-    // password check
-    // access and refresh token
-    // send cookie
 
     const {adminEmail,adminPhoneNumber, adminPassword} = req.body
 
@@ -92,9 +78,8 @@ const loginAdmin = asyncHandler( async (req, res) => {
         throw new apiError(400, "phoneNumber or email is required")
     }
 
-    // check email or phoneNumber is present in DB 
+
     const admin = await Admin.findOne({
-        // or, and, text, where, nor these all are mongo DB operators
         $or: [{adminEmail} , {adminPhoneNumber}]
     })
 
@@ -119,7 +104,7 @@ const loginAdmin = asyncHandler( async (req, res) => {
     const loggedInAdmin = await Admin.findById(admin._id).select("-adminPassword  -refreshToken")
     
 
-    //  pass cookie 
+   
     const options = {
         httpOnly: true,
         secure: true
@@ -155,7 +140,6 @@ const logoutAdmin = asyncHandler(async(req, res) => {
     await Admin.findByIdAndUpdate(
         req.admin._id,
         {
-            // $set is a mongoDB operator use to update a value
             $set: {
                 refreshToken: undefined
             }

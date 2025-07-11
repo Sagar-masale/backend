@@ -14,7 +14,6 @@ export const sendOtp = asyncHandler(async (req, res) => {
     if (!email) {
         throw new apiError(400, "Email is required");   
     }
-    console.log("Received OTP request for email:", email);
 
     const otp = generateOTP();
     otpStore.set(email, { otp, expiresAt: Date.now() + 5 * 60 * 1000 });
@@ -55,16 +54,16 @@ export const requestOtp = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: 'User not found.' });
     }
 
-    // Generate OTP and Expiry
+ 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpires = Date.now() + 5 * 60 * 1000;
 
-    // Save OTP and Expiry in DB
+ 
     user.otp = otp;
     user.otpExpires = otpExpires;
     await user.save();
 
-    // Send OTP to user's email
+
     await sendOtpEmail(user.email, otp);
 
     res.status(200).json({ message: 'OTP sent successfully.' });
@@ -75,7 +74,7 @@ export const verifyOtpAndResetPassword = async (req, res) => {
     const { emailOrPhone, otp, newPassword } = req.body;
 
     try {
-        // Check if user exists by email or phone
+      
         const user = await User.findOne({
             $or: [
                 { email: emailOrPhone },
@@ -87,12 +86,12 @@ export const verifyOtpAndResetPassword = async (req, res) => {
             return res.status(404).json({ message: 'User not found.' });
         }
 
-        // Check if OTP exists and is not expired
+  
         if (!user.otp || !user.otpExpires) {
             return res.status(400).json({ message: 'OTP not found or expired.' });
         }
 
-        // Compare OTP and Check Expiry
+    
         if (user.otp !== otp) {
             return res.status(400).json({ message: 'Invalid OTP.' });
         }
@@ -100,7 +99,7 @@ export const verifyOtpAndResetPassword = async (req, res) => {
             return res.status(400).json({ message: 'OTP has expired.' });
         }
 
-        // Update user's password and clear OTP fields
+ 
         user.password = newPassword;
         user.otp = undefined;
         user.otpExpires = undefined;

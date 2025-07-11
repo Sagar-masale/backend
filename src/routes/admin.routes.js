@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { loginAdmin, logoutAdmin, refreshAccessTokenAdmin, getCurrentAdmin, registerAdmin, getAllUsers } from "../controllers/admin.controller.js"
-// import { upload } from "../middlewares/multer.middleware.js";
+
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import metalRate from "../models/metalRate.js";
 import { sendProductEmail } from "../Auth/sendProductEmail .js";
 const adminRouter = Router();
 
 
-// for Admin
+
 adminRouter.route("/register-admin").post(registerAdmin)
 adminRouter.route("/login-admin").post(loginAdmin)
 adminRouter.route("/logout-admin").post(verifyJWT, logoutAdmin)

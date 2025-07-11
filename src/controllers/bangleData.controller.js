@@ -5,9 +5,7 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding bangle data
 const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
 
   const {
     ProductImages,
@@ -26,7 +24,7 @@ const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(400, "At least one image file is required");
   }
 
-  // Validate other fields
+
   if (
     !ProductName ||
     !ProductCategory ||
@@ -49,12 +47,11 @@ const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url; 
     })
   );
 
@@ -80,7 +77,7 @@ const getBangleDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getBangleData = asyncHandler(async (req, res) => {
   try {
-    const bangles = await BangleData.find(); // Fetch all bangles from the database
+    const bangles = await BangleData.find(); 
 
     if (!bangles || bangles.length === 0) {
       throw new apiError(404, "No bangles found");
@@ -104,7 +101,7 @@ const getBangleById = asyncHandler(async (req, res) => {
       );
     }
 
-    const bangle = await BangleData.findById(productId); // Make sure BangleData is imported
+    const bangle = await BangleData.findById(productId); 
 
     if (!bangle) {
       return res.status(404).json(

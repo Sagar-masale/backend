@@ -5,9 +5,8 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding chain data
+
 const getChainDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
 
   const {
     ProductImages,
@@ -26,7 +25,7 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(400, "At least one image file is required");
   }
 
-  // Validate other fields
+
   if (
     !ProductName ||
     !ProductCategory ||
@@ -49,12 +48,11 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url; 
     })
   );
 
@@ -80,7 +78,7 @@ const getChainDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getChainData = asyncHandler(async (req, res) => {
   try {
-    const chains = await ChainData.find(); // Fetch all chains from the database
+    const chains = await ChainData.find(); 
 
     if (!chains || chains.length === 0) {
       throw new apiError(404, "No chains found");
@@ -104,7 +102,7 @@ const getChainById = asyncHandler(async (req, res) => {
       );
     }
 
-    const chain = await ChainData.findById(productId); // Ensure ChainData is imported
+    const chain = await ChainData.findById(productId);
 
     if (!chain) {
       return res.status(404).json(

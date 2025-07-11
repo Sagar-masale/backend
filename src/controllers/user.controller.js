@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
-// import { uploadOnCloudinary } from "../utils/cloudinary.js";
+
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from 'jsonwebtoken'
 import { sendRegistrationEmail } from "../Auth/sendRegistrationEmail.js";
@@ -12,7 +12,7 @@ const generateAccessAndRefreshToken = async(userId) => {
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
         
-        // assign userRefreshToken to refreshToken
+
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
 
@@ -28,14 +28,14 @@ const registerUser = asyncHandler( async (req, res) => {
 
 
 
-    // get user details from frontend.
+
     const {email = '', fullName = '', password = '',phoneNumber= '' } = req.body || {};
-    // console.log("email: ", email);
 
 
-    // validation - not empty.
+
+
     if (
-        //check all user data is empty or not ( adv js )
+
         [email, fullName, password, phoneNumber].some((field) => 
         field?.trim()== "")
     ) {
@@ -43,7 +43,7 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 
     
-    // check if user already exist: phoneNumber, email.
+
     const existedUser = await  User.findOne({
         $or: [{ phoneNumber }, { email }]
     })
@@ -55,7 +55,7 @@ const registerUser = asyncHandler( async (req, res) => {
     }
     
     
-    // create user object - create entry in db.
+
     const user = await User.create({
         fullName,
         email,
@@ -63,20 +63,20 @@ const registerUser = asyncHandler( async (req, res) => {
         phoneNumber
     })
 
-    // remove password and refresh token field from response.
+
     const createdUser = await User.findById(user._id)
         .select(
             "-password -refreshToken"
         )
 
-        // check for user creation.
+
     
         if(!createdUser){
             throw new apiError(500, "somthing went wrong while regersting the user")
         }
         await sendRegistrationEmail(email, fullName);
 
-        // return true res.
+
         return res.status(201).json(
             new apiResponse(200, createdUser, "user registered successfully")
         )
@@ -85,12 +85,6 @@ const registerUser = asyncHandler( async (req, res) => {
 
 
 const loginUser = asyncHandler( async (req, res) => {
-    // req body -> data
-    // phoneNumer or email
-    // find the user
-    // password check
-    // access and refresh token
-    // send cookie
 
     const {email,phoneNumber, password} = req.body
 
@@ -98,16 +92,13 @@ const loginUser = asyncHandler( async (req, res) => {
         throw new apiError(400, "phoneNumber or email is required")
     }
 
-    // check email or phoneNumber is present in DB 
+
     const user = await User.findOne({
-        // or, and, text, where, nor these all are mongo DB operators
+ 
         $or: [{email} , {phoneNumber}]
     })
 
-    // if(!user) {
-    //     throw new apiError(404, "User does not exist")
-    //     return res new apiResponse.status(404).json({ message: "User does not exist" });
-    // }
+
     if (!user) {
         return res.status(404).json({ message: "User does not exist" });
     }
@@ -128,7 +119,7 @@ const loginUser = asyncHandler( async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken").populate("userOrders");
     
 
-    //  pass cookie 
+
     const options = {
         httpOnly: true,
         secure: true
@@ -153,7 +144,7 @@ const logoutUser = asyncHandler(async(req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            // $set is a mongoDB operator use to update a value
+
             $set: {
                 refreshToken: undefined
             }
@@ -178,17 +169,15 @@ const logoutUser = asyncHandler(async(req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
     const { userId, password, ...updates } = req.body;
 
-    // Remove empty fields (undefined, null, or empty string)
+ 
     const filteredUpdates = Object.fromEntries(
         Object.entries(updates).filter(([_, value]) => value?.toString().trim())
     );
 
-    // If no fields are provided, return an error
     if (Object.keys(filteredUpdates).length === 0 && !password) {
         throw new apiError(400, "At least one field is required to update");
     }
 
-    // Include password only if provided
     if (password) {
         filteredUpdates.password = password;
     }

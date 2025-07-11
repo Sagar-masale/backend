@@ -5,9 +5,9 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding earring data
+
 const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
+
 
   const {
     ProductImages,
@@ -26,7 +26,6 @@ const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(400, "At least one image file is required");
   }
 
-  // Validate other fields
   if (
     !ProductName ||
     !ProductCategory ||
@@ -49,12 +48,12 @@ const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
+
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url;
     })
   );
 
@@ -80,7 +79,7 @@ const getEarringDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getEarringData = asyncHandler(async (req, res) => {
   try {
-    const earrings = await EarringData.find(); // Fetch all earrings from the database
+    const earrings = await EarringData.find(); 
 
     if (!earrings || earrings.length === 0) {
       throw new apiError(404, "No earrings found");
@@ -104,7 +103,7 @@ const getEarringById = asyncHandler(async (req, res) => {
       );
     }
 
-    const earring = await EarringData.findById(productId); // Make sure EarringData is imported
+    const earring = await EarringData.findById(productId); 
 
     if (!earring) {
       return res.status(404).json(
@@ -145,20 +144,20 @@ const updateEarringData = asyncHandler(async (req, res) => {
 });
 
 const deleteEarringData = asyncHandler(async (req, res) => {
-  const { id } = req.body; // Get the ID from the request body
+  const { id } = req.body; 
 
   if (!id) {
     throw new apiError(400, "Earring ID is required");
   }
 
-  const earring = await EarringData.findById(id); // Find the earring by ID
+  const earring = await EarringData.findById(id); 
 
   if (!earring) {
     throw new apiError(404, "Earring not found");
   }
 
-  // Use deleteOne instead of remove()
-  await EarringData.deleteOne({ _id: id }); // Delete the earring data from the database
+
+  await EarringData.deleteOne({ _id: id });
 
   res.status(200).json(
     new apiResponse(200, "Earring data deleted successfully", { id })

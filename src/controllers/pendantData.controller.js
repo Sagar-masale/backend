@@ -7,7 +7,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 // Controller to handle adding pendant data
 const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
+
 
   const {
     ProductImages,
@@ -26,7 +26,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(400, "At least one image file is required");
   }
 
-  // Validate other fields
+ 
   if (
     !ProductName ||
     !ProductCategory ||
@@ -49,12 +49,12 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
+
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url; 
     })
   );
 
@@ -80,7 +80,7 @@ const getPendantDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getPendantData = asyncHandler(async (req, res) => {
   try {
-    const pendants = await PendantData.find(); // Fetch all pendants from the database
+    const pendants = await PendantData.find();
 
     if (!pendants || pendants.length === 0) {
       throw new apiError(404, "No pendants found");
@@ -103,7 +103,7 @@ const getPendantById = asyncHandler(async (req, res) => {
       );
     }
 
-    const pendant = await PendantData.findById(productId); // Ensure PendantData is imported
+    const pendant = await PendantData.findById(productId); 
 
     if (!pendant) {
       return res.status(404).json(
@@ -123,19 +123,19 @@ const getPendantById = asyncHandler(async (req, res) => {
 });
 
 const deletePendantData = asyncHandler(async (req, res) => {
-  const { id } = req.body; // Get the ID from the request body
+  const { id } = req.body; 
 
   if (!id) {
     throw new apiError(400, "Pendant ID is required");
   }
 
-  const pendant = await PendantData.findById(id); // Find the pendant by ID
+  const pendant = await PendantData.findById(id);
 
   if (!pendant) {
     throw new apiError(404, "Pendant not found");
   }
 
-  await PendantData.deleteOne({ _id: id }); // Delete the pendant data
+  await PendantData.deleteOne({ _id: id });
 
   res.status(200).json(
     new apiResponse(200, "Pendant data deleted successfully", { id })

@@ -8,7 +8,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 // Controller to handle adding ring data
 const getRingDataWithAdmin = asyncHandler(async (req, res) => {
-  // console.log("Received files:", req.files); // Debug log for files
+
 
   const {
     ProductImages,
@@ -51,12 +51,12 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
+
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url; 
     })
   );
 
@@ -84,7 +84,7 @@ const getRingDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getRingData = asyncHandler(async ( req, res ) => {
   try {
-    const rings = await RingData.find(); // Fetch all rings from the database
+    const rings = await RingData.find();
 
     if (!rings || rings.length === 0) {
       throw new apiError(404, "No rings found");
@@ -129,20 +129,20 @@ const getRingById = asyncHandler(async (req, res) => {
 
 
 const deleteRingData = asyncHandler(async (req, res) => {
-  const { id } = req.body; // Get the ID from the request body
+  const { id } = req.body;
 
   if (!id) {
     throw new apiError(400, "Ring ID is required");
   }
 
-  const ring = await RingData.findById(id); // Find the ring by ID
+  const ring = await RingData.findById(id);
 
   if (!ring) {
     throw new apiError(404, "Ring not found");
   }
 
   // Use deleteOne instead of remove()
-  await RingData.deleteOne({ _id: id }); // Delete the ring data from the database
+  await RingData.deleteOne({ _id: id });
 
   res.status(200).json(
     new apiResponse(200, "Ring data deleted successfully", { id })

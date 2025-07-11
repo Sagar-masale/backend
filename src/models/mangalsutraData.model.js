@@ -45,7 +45,7 @@ const mangalsutraDataSchema = new Schema(
         },
         adminId: {
             type: mongoose.Schema.Types.ObjectId, ref: "Admin", required: true 
-        }, // Reference to Admin
+        },
 
 }, {timestamps: true});
 

@@ -24,6 +24,6 @@ export const sendRegistrationEmail = async (email, fullName) => {
     });
   } catch (err) {
     console.error("Error sending registration email:", err);
-    // Don't throw error here, just log it so registration isn't blocked
+    
   }
 };

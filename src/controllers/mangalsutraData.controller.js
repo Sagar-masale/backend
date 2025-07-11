@@ -5,9 +5,9 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
-// Controller to handle adding mangalsutra data
+
 const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
-  console.log("Received files:", req.files); // Debug log for files
+
 
   const {
     ProductImages,
@@ -26,7 +26,7 @@ const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
     throw new apiError(400, "At least one image file is required");
   }
 
-  // Validate other fields
+ 
   if (
     !ProductName ||
     !ProductCategory ||
@@ -49,12 +49,12 @@ const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
   const uploadedImages = await Promise.all(
     files.map(async (file) => {
       const uploadedImage = await uploadOnCloudinary(file.path);
-      console.log("Uploaded image:", uploadedImage);
+
 
       if (!uploadedImage || !uploadedImage.url) {
         throw new apiError(400, "Failed to upload one or more images");
       }
-      return uploadedImage.url; // Store the URL for each uploaded image
+      return uploadedImage.url; 
     })
   );
 
@@ -80,7 +80,7 @@ const getMangalsutraDataWithAdmin = asyncHandler(async (req, res) => {
 
 const getMangalsutraData = asyncHandler(async (req, res) => {
   try {
-    const mangalsutras = await MangalsutraData.find(); // Fetch all mangalsutras from the database
+    const mangalsutras = await MangalsutraData.find();
 
     if (!mangalsutras || mangalsutras.length === 0) {
       throw new apiError(404, "No mangalsutras found");
@@ -104,7 +104,7 @@ const getMangalsutraById = asyncHandler(async (req, res) => {
       );
     }
 
-    const mangalsutra = await MangalsutraData.findById(productId); // Make sure this model is imported
+    const mangalsutra = await MangalsutraData.findById(productId); 
 
     if (!mangalsutra) {
       return res.status(404).json(

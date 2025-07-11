@@ -1,4 +1,4 @@
-// routes/publicRoutes.js
+
 import express from "express";
 import metalRate from "../models/metalRate.js";
 

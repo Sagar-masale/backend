@@ -3,7 +3,7 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { Review } from "../models/userReview.model.js";
 
-// Create Review
+
 const createReview = asyncHandler(async (req, res) => {
     const { userId, productId, userName, reviewTitle, reviewRating, reviewComment, productImage } = req.body;
 
@@ -42,7 +42,7 @@ const getAllReview = asyncHandler(async( req, res) => {
     return res.status(200).json(new apiResponse(200, allReviewa, "Reviews fetched successfully"));
 })
 
-// Get Reviews by User ID
+
 const getReviewsByUser = asyncHandler(async (req, res) => {
     const { userId } = req.body;
 
@@ -55,7 +55,7 @@ const getReviewsByUser = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, reviews, "User reviews fetched successfully"));
 });
 
-// Update Review
+
 const updateReview = asyncHandler(async (req, res) => {
     const { reviewId, reviewTitle, reviewRating, reviewComment } = req.body;
 
@@ -76,7 +76,7 @@ const updateReview = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, updatedReview, "Review updated successfully"));
 });
 
-// Delete Review
+
 const deleteReview = asyncHandler(async (req, res) => {
     const { reviewId } = req.body;
 
