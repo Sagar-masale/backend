@@ -127,26 +127,29 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 
 // ✅ Delete an order
 const deleteOrder = asyncHandler(async (req, res) => {
-    const { orderId } = req.body;
+  const { orderId } = req.body;
 
-    // ✅ Find the order first
-    const deletedOrder = await Order.findByIdAndDelete(orderId);
+  const deletedOrder = await Order.findByIdAndDelete(orderId);
 
-    if (!deletedOrder) {
-        throw new apiError(404, "Order not found");
-    }
-    await User.findByIdAndUpdate(deletedOrder.userId, {
-        $pull: { userOrders: orderId }
-    });
+  if (!deletedOrder) {
+    throw new apiError(404, "Order not found");
+  }
 
-    // 🟢 Send order cancelled email
-    await sendOrderCancellationEmail(deletedOrder.userEmail, deletedOrder);
-    // ✅ Remove the order ID from the user's `userOrders` array
-    await User.findByIdAndUpdate(deletedOrder.userId, {
-        $pull: { userOrders: orderId }
-    });
+  // ✅ Remove the order ID from the user's `userOrders` array
+  await User.findByIdAndUpdate(deletedOrder.userId, {
+    $pull: { userOrders: orderId }
+  });
 
-    return res.status(200).json(new apiResponse(200, {}, "Order deleted successfully"));
+  // ✅ Fetch user email
+  const user = await User.findById(deletedOrder.userId);
+
+  if (user?.email) {
+    await sendOrderCancellationEmail(user.email, deletedOrder); // ✅ Pass actual user email
+  } else {
+    console.warn("User email not found for cancelled order.");
+  }
+
+  return res.status(200).json(new apiResponse(200, {}, "Order deleted successfully"));
 });
 
 
