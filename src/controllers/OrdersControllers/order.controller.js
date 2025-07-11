@@ -11,6 +11,7 @@ import { PendantData } from "../../models/pendantData.model.js";
 import { RingData } from "../../models/ringData.model.js";
 import { disconnect } from "mongoose";
 import { sendOrderConfirmationEmail } from "../../Auth/sendOrderConfirmationEmail.js";
+import { sendOrderCancellationEmail } from "../../Auth/sendOrderCancellationEmail.js";
 
 // Utility function to find product by ID in different collections
 const findProductById = async (productId) => {
@@ -134,7 +135,12 @@ const deleteOrder = asyncHandler(async (req, res) => {
     if (!deletedOrder) {
         throw new apiError(404, "Order not found");
     }
+    await User.findByIdAndUpdate(deletedOrder.userId, {
+        $pull: { userOrders: orderId }
+    });
 
+    // 🟢 Send order cancelled email
+    await sendOrderCancellationEmail(deletedOrder.userEmail, deletedOrder);
     // ✅ Remove the order ID from the user's `userOrders` array
     await User.findByIdAndUpdate(deletedOrder.userId, {
         $pull: { userOrders: orderId }
