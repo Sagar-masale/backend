@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import jwt from 'jsonwebtoken'
 import { sendRegistrationEmail } from "../Auth/sendRegistrationEmail.js";
+import { sendAdminNewUserAlert } from "../Auth/sendAdminNewUserAlert.js";
 
 const generateAccessAndRefreshToken = async(userId) => {
     try {
@@ -75,6 +76,7 @@ const registerUser = asyncHandler( async (req, res) => {
             throw new apiError(500, "somthing went wrong while regersting the user")
         }
         await sendRegistrationEmail(email, fullName);
+        await sendAdminNewUserAlert(user);   
 
 
         return res.status(201).json(

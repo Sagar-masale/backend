@@ -12,7 +12,8 @@ import { RingData } from "../../models/ringData.model.js";
 import { disconnect } from "mongoose";
 import { sendOrderConfirmationEmail } from "../../Auth/sendOrderConfirmationEmail.js";
 import { sendOrderCancellationEmail } from "../../Auth/sendOrderCancellationEmail.js";
-
+import { sendAdminOrderAlertEmail } from "../../Auth/sendAdminOrderAlertEmail.js";
+import { sendAdminOrderCancellationAlert } from "../../Auth/sendAdminOrderCancellationAlert.js";
 
 const findProductById = async (productId) => {
     return await BangleData.findById(productId) ||
@@ -56,6 +57,7 @@ const createOrder = asyncHandler(async (req, res) => {
       const user = await User.findById(userId);
         if (user?.email) {
             await sendOrderConfirmationEmail(user.email, newOrder); // ✅ Send email
+            await sendAdminOrderAlertEmail(user, newOrder);
         }
 
     return res.status(201).json(new apiResponse(201, newOrder, "Order created successfully"));
@@ -146,6 +148,7 @@ const deleteOrder = asyncHandler(async (req, res) => {
   if (user?.email) {
     const userName = user.fullName?.split(" ")[0] || "Customer";
     await sendOrderCancellationEmail(user.email, deletedOrder, userName);
+    await sendAdminOrderCancellationAlert(user, deletedOrder);
   }
 
   return res.status(200).json(new apiResponse(200, {}, "Order deleted successfully"));
