@@ -10,8 +10,8 @@ backend/
 │   ├── models/
 │   ├── routes/
 │   ├── middleware/
-│   ├── database/
-│   └── utils/
+│   ├── utils/
+│   └── database/
 │
 ├── server.js
 └── package.json
